@@ -72,6 +72,21 @@ canvas{display:block}
   padding:6px 14px;border-radius:99px;border:1px solid rgba(255,201,60,.4)}
 .wLock .lockCost.can{color:var(--green);border-color:rgba(91,240,165,.5);animation:pulse 2s infinite}
 .wDone{position:absolute;top:12px;right:12px;font-size:22px;filter:drop-shadow(0 0 8px rgba(91,240,165,.7))}
+.dailyCard{position:relative;overflow:hidden;max-width:920px;width:100%;margin:0 auto 16px;
+  display:flex;align-items:center;gap:14px;text-align:left;
+  background:linear-gradient(120deg,rgba(255,201,60,.16),rgba(178,108,255,.14)),var(--space2);
+  border:1.5px solid rgba(255,201,60,.5);border-radius:20px;padding:14px 18px;transition:transform .15s}
+.dailyCard:active{transform:scale(.99)}
+.dailyCard.ready{box-shadow:0 0 0 1px rgba(255,201,60,.3);animation:pulse 2.4s infinite}
+.dailyCard.done{filter:saturate(.6) brightness(.9);border-color:rgba(91,240,165,.4)}
+.dcGlow{position:absolute;top:-40%;left:-20%;width:60%;height:180%;background:radial-gradient(closest-side,rgba(255,201,60,.35),transparent);
+  animation:sweep 4s linear infinite;pointer-events:none}
+@keyframes sweep{0%{transform:translateX(-40%)}100%{transform:translateX(320%)}}
+.dcIcon{font-size:40px;filter:drop-shadow(0 3px 8px rgba(0,0,0,.5))}
+.dcMain{flex:1}
+.dcLabel{font-family:'Nunito';font-size:12px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:1px}
+.dcTitle{font-family:'Fredoka';font-size:18px;margin-top:2px}
+.dcStatus{font-family:'Fredoka';font-size:20px;color:var(--gold)}
 .hubBtnRow{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:20px auto 30px;max-width:920px;width:100%}
 .hubBtn{background:var(--panel);border:1px solid var(--line);color:var(--white);
   font-size:14px;padding:11px 20px;border-radius:14px;display:flex;align-items:center;gap:7px}
@@ -94,6 +109,8 @@ body.playing #hud{opacity:1}
   transition:width .6s cubic-bezier(.4,1.6,.5,1)}
 .starChip{font-family:'Fredoka';font-size:16px;color:var(--gold)}
 .streakChip{font-family:'Fredoka';font-size:15px;color:#FF9F5B}
+.titleChip{font-family:'Fredoka';font-size:14px;color:var(--gold);
+  border-color:rgba(255,201,60,.4);background:linear-gradient(120deg,rgba(255,201,60,.14),rgba(178,108,255,.12))}
 #hudRight{margin-left:auto;display:flex;gap:8px;align-items:center}
 #backHub{pointer-events:auto;background:var(--panel);color:var(--cyan);
   border:1px solid var(--line);font-size:13px;padding:9px 15px;border-radius:14px;display:flex;align-items:center;gap:6px}
@@ -142,7 +159,9 @@ body.playing #hint{opacity:1}
 .missionBtn.done{background:linear-gradient(120deg,var(--green),#9BFAC8);box-shadow:none}
 
 /* ---------- MISSION BRIEFING ---------- */
-#brief{position:fixed;inset:0;z-index:42;display:none;align-items:center;justify-content:center;
+/* Missions can be launched from the World Hub (daily challenge), so the
+   briefing/quiz/reward overlays sit ABOVE the hub (z-index 45). */
+#brief{position:fixed;inset:0;z-index:52;display:none;align-items:center;justify-content:center;
   background:rgba(4,6,18,.82);backdrop-filter:blur(6px);padding:18px}
 #brief.open{display:flex}
 .bCard{width:min(500px,100%);background:var(--space2);border:1px solid var(--accent);border-radius:24px;
@@ -155,7 +174,7 @@ body.playing #hint{opacity:1}
 .bBtn:active{transform:scale(.96)}
 
 /* ---------- QUIZ ---------- */
-#quiz{position:fixed;inset:0;z-index:40;display:none;align-items:center;justify-content:center;
+#quiz{position:fixed;inset:0;z-index:52;display:none;align-items:center;justify-content:center;
   background:rgba(4,6,18,.82);backdrop-filter:blur(6px);padding:18px}
 #quiz.open{display:flex}
 .qCard{width:min(520px,100%);background:var(--space2);border:1px solid var(--line);border-radius:24px;
@@ -193,7 +212,7 @@ body.playing #hint{opacity:1}
 .qFeed{min-height:22px;font-size:14px;font-weight:800;margin-top:8px}
 
 /* ---------- REWARD ---------- */
-#reward{position:fixed;inset:0;z-index:46;display:none;align-items:center;justify-content:center;
+#reward{position:fixed;inset:0;z-index:53;display:none;align-items:center;justify-content:center;
   background:rgba(4,6,18,.85);padding:18px}
 #reward.open{display:flex}
 .rCard{text-align:center;background:var(--space2);border:1px solid rgba(255,201,60,.4);border-radius:28px;

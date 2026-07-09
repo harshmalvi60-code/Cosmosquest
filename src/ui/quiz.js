@@ -117,7 +117,8 @@ export function runQuiz({ title, questions, onComplete }) {
     opts.forEach(([opt, i]) => {
       const b = document.createElement('button');
       b.className = 'picBtn';
-      b.innerHTML = `<div class="picShape">${shapeSVG(opt.shape, opt.color)}</div><div class="picLabel">${opt.label || ''}</div>`;
+      const scale = opt.size ? ` style="transform:scale(${opt.size})"` : '';
+      b.innerHTML = `<div class="picShape"${scale}>${shapeSVG(opt.shape, opt.color)}</div>${opt.label ? `<div class="picLabel">${opt.label}</div>` : ''}`;
       b.onclick = () => {
         [...row.children].forEach((x) => (x.disabled = true));
         const right = i === q.answer;

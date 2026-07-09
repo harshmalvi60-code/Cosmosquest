@@ -1,8 +1,8 @@
 import './style.css';
 import { buildDOM, $, toast } from './ui/dom.js';
 import { loadState, saveState } from './game/state.js';
-import { touchStreak, recordMission, worldProgress, isWorldUnlocked,
-  canAfford, unlockWorld, dailyChallenge, markDailyDone } from './game/profile.js';
+import { recordMission, worldProgress, canAfford, unlockWorld,
+  dailyChallenge, markDailyDone } from './game/profile.js';
 import { buildQuiz, difficultyFor } from './game/quiz.js';
 import { createEngine } from './engine/index.js';
 import { WORLDS } from './worlds/index.js';
@@ -18,7 +18,6 @@ import { celebrateWorld } from './ui/celebrate.js';
 buildDOM(document.getElementById('app'));
 
 const state = loadState();
-touchStreak(state);
 saveState(state);
 
 const engine = createEngine($('scene'), { onPick });
@@ -44,8 +43,14 @@ $('playBtn').onclick = () => {
   openHub();
 };
 
-function openHub() {
+function renderHubNow() {
   renderHub(state, WORLDS, { onEnter: enterWorld, onLockedTap: handleLockedTap });
+}
+function refreshHubIfOpen() {
+  if ($('hub').classList.contains('open')) renderHubNow();
+}
+function openHub() {
+  renderHubNow();
   showHub();
 }
 
@@ -54,7 +59,7 @@ function handleLockedTap(world) {
   if (canAfford(state, world)) {
     unlockWorld(state, world);
     saveState(state);
-    renderHub(state, WORLDS, { onEnter: enterWorld, onLockedTap: handleLockedTap });
+    renderHubNow();
     toast(`🔓 ${world.name} unlocked! Dive in!`);
   } else {
     toast(`Earn ${world.unlockCost - state.stars} more ⭐ to unlock ${world.name}!`);
@@ -84,17 +89,17 @@ $('collectBtn').onclick = () => renderCollection(state, WORLDS);
 $('hubCollectBtn').onclick = () => renderCollection(state, WORLDS);
 
 /* ---------- daily challenge ---------- */
-$('dailyBtn').onclick = () => {
+$('dailyCard').onclick = () => {
   const daily = dailyChallenge(state, WORLDS);
   if (!daily) { toast('Unlock a world to play the daily!'); return; }
   if (daily.doneToday) { toast('🎯 Daily done! Come back tomorrow for a new one.'); return; }
   const subj = daily.world.subjects[daily.subjectKey];
   toast(`Today's Daily Challenge: ${subj.emoji} ${subj.name}!`);
-  startMission(daily.world, daily.subjectKey, { daily: true, bonus: 5 });
+  startMission(daily.world, daily.subjectKey, { daily: true, bonusStars: 3 });
 };
 
 /* ---------- mission flow ---------- */
-function startMission(world, subjectKey, { daily = false, bonus = 0 } = {}) {
+function startMission(world, subjectKey, { daily = false, bonusStars = 0 } = {}) {
   const subject = world.subjects[subjectKey];
   closePanel();
   const prog = worldProgress(state, world);
@@ -105,18 +110,19 @@ function startMission(world, subjectKey, { daily = false, bonus = 0 } = {}) {
     runQuiz({
       title: `${subject.emoji} ${subject.name} Mission`,
       questions,
-      onComplete: (correct, total) => finishMission(world, subjectKey, correct, total, { daily, bonus }),
+      onComplete: (correct, total) => finishMission(world, subjectKey, correct, total, { daily, bonusStars }),
     });
   });
 }
 
-function finishMission(world, subjectKey, correct, total, { daily, bonus }) {
+function finishMission(world, subjectKey, correct, total, { daily, bonusStars }) {
   const subject = world.subjects[subjectKey];
-  const result = recordMission(state, world, subjectKey, correct, total, { bonus });
+  const result = recordMission(state, world, subjectKey, correct, total, { bonusStars });
 
-  if (daily) markDailyDone(state, `${world.key}:${subjectKey}`);
+  if (daily) markDailyDone(state, world.key, subjectKey);
   saveState(state);
   refreshHUD(state);
+  refreshHubIfOpen(); // keep hub cards/daily in sync if a mission ran from the hub
   if (result.passed && currentWorld && currentWorld.key === world.key) engine.markDone(subjectKey);
 
   showReward({

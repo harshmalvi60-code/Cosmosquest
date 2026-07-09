@@ -28,9 +28,17 @@ export function buildDOM(root) {
       </div>
     </div>
     <div class="hubSub">Unlock new worlds as you earn stars. Your rank, stars and badges carry across them all.</div>
+    <button class="dailyCard" id="dailyCard">
+      <div class="dcGlow"></div>
+      <div class="dcIcon" id="dcIcon">🎯</div>
+      <div class="dcMain">
+        <div class="dcLabel">Daily Challenge · <span id="dcBonus">+5 ⭐ bonus</span></div>
+        <div class="dcTitle" id="dcTitle">Tap to play today's mission!</div>
+      </div>
+      <div class="dcStatus" id="dcStatus">▶</div>
+    </button>
     <div class="worldGrid" id="worldGrid"></div>
     <div class="hubBtnRow">
-      <button class="hubBtn daily" id="dailyBtn">🎯 Daily Challenge</button>
       <button class="hubBtn" id="hubCollectBtn">🏅 My Collection</button>
     </div>
   </div>
@@ -44,6 +52,7 @@ export function buildDOM(root) {
       <div class="xpBar"><div class="xpFill" id="xpFill"></div></div></div></div>
     <div class="chip starChip">⭐ <span id="starCount">0</span></div>
     <div class="chip streakChip" id="streakChip">🔥 <span id="streakCount">0</span></div>
+    <div class="chip titleChip" id="titleChip"><span id="titleText"></span></div>
     <div id="hudRight">
       <button id="collectBtn" title="My Collection">🏅</button>
       <button id="backHub">🗺️ <span class="lbl">Worlds</span></button>

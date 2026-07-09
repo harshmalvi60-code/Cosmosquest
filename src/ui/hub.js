@@ -1,6 +1,6 @@
 import { $ } from './dom.js';
 import { rankFor } from '../game/ranks.js';
-import { worldProgress, isWorldUnlocked, canAfford, isWorldComplete } from '../game/profile.js';
+import { worldProgress, isWorldUnlocked, canAfford, isWorldComplete, dailyChallenge } from '../game/profile.js';
 
 /** Convert a 0xRRGGBB int to a CSS hex string. */
 function hex(n) { return '#' + n.toString(16).padStart(6, '0'); }
@@ -15,6 +15,27 @@ export function renderHub(state, worlds, { onEnter, onLockedTap } = {}) {
   $('hubStars').textContent = state.stars;
   $('hubStreak').textContent = state.streak.count;
   $('hubBadges').textContent = state.badges.length;
+
+  // Daily challenge card.
+  const daily = dailyChallenge(state, worlds);
+  const card = $('dailyCard');
+  if (!daily) {
+    $('dcTitle').textContent = 'Unlock a world to play the daily!';
+    $('dcIcon').textContent = '🔒';
+    card.className = 'dailyCard done';
+  } else {
+    const subj = daily.world.subjects[daily.subjectKey];
+    $('dcIcon').textContent = subj.emoji;
+    if (daily.doneToday) {
+      $('dcTitle').textContent = 'Done! Come back tomorrow for a new one 🌙';
+      $('dcStatus').textContent = '✓';
+      card.className = 'dailyCard done';
+    } else {
+      $('dcTitle').textContent = `${subj.name} — ${daily.world.name}`;
+      $('dcStatus').textContent = '▶';
+      card.className = 'dailyCard ready';
+    }
+  }
 
   const grid = $('worldGrid');
   grid.innerHTML = '';

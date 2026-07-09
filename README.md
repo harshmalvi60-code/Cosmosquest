@@ -10,18 +10,22 @@ ExploraQuest is the evolution of the original single-file **CosmosQuest**
 prototype (preserved at [`cosmosquest-prototype.html`](./cosmosquest-prototype.html));
 the solar system is now simply **World 1**.
 
-## Worlds
-| World | Status | Unlock |
-|------|--------|--------|
-| 🪐 Universe | ✅ Complete (Sun, 8 planets, 4 deep-space objects) | Free |
-| 🌿 Nature | ✅ Complete (9 ecosystems) | 12 ⭐ |
-| 🦁 Animal Kingdom | 🔨 Coming soon | 24 ⭐ |
-| 🐬 Ocean Life | 🔨 Coming soon | 40 ⭐ |
-| 🫀 Human Body | 🔨 Coming soon | 60 ⭐ |
-| 🦖 Dinosaurs | 🔨 Coming soon | 84 ⭐ |
+## Worlds — all six complete
+| World | Subjects | Visual language | Unlock |
+|------|--------|--------|--------|
+| 🪐 Universe | 13 (Sun, 8 planets, 4 deep-space) | Orbiting solar system | Free |
+| 🌿 Nature | 9 ecosystems | Floating biome islands | 12 ⭐ |
+| 🦁 Animal Kingdom | 10 animals | Low-poly animals with idle animation | 24 ⭐ |
+| 🐬 Ocean Life | 8 sea creatures | Underwater scene: bubbles, caustics, sandy floor | 40 ⭐ |
+| 🫀 Human Body | 8 organs | Organs placed inside a rotatable body silhouette | 60 ⭐ |
+| 🦖 Dinosaurs | 8 (7 dinos + asteroid) | Prehistoric terrain with a smoking volcano | 84 ⭐ |
 
-One shared player profile (XP, stars, rank, badges, streak) carries across
-every world; each world also tracks its own completion (e.g. "6/9 Nature").
+One shared player profile (XP, stars, rank, badges, streak, titles) carries
+across every world; each world also tracks its own completion (e.g. "6/9
+Nature"). Every subject has 4 stats, 4 facts, a WOW fact, a story-mission
+briefing, a base quiz (mixing multiple-choice, true/false and picture
+questions) and — for the five new worlds — a harder two-step `quizHard` set
+that scales in as the world is explored.
 
 ## Game features
 - **World Hub** — the home shelf of worlds, each with icon, colour theme, live
@@ -33,9 +37,12 @@ every world; each world also tracks its own completion (e.g. "6/9 Nature").
   questions as the kid progresses.
 - **Badges & My Collection** — perfect a mission to collect its badge; browse
   all badges earned vs. available across every world.
-- **Daily Challenge** — one bonus-star mission per day to bring kids back.
-- **Streak counter** — consecutive days played, shown in the HUD.
-- **World-complete celebration** — a Three.js confetti burst + master title
+- **Daily Challenge** — a glowing card on the hub: one random subject from your
+  unlocked worlds each day, for bonus stars.
+- **Streak counter** — consecutive days with a completed mission, shown quietly
+  in the HUD (resets to 1 after a missed day).
+- **World-complete celebration** — a Three.js confetti burst plus a cosmetic
+  master **title** (e.g. "Ocean Master 🌊") shown next to your rank, unlocked
   when every subject in a world is passed.
 
 ## Project structure
@@ -57,8 +64,8 @@ src/
                      reward, collection, celebration)
   worlds/            One module per world = data + 3D build()
     helpers.js       Shared markers / layout
-    universe.js      World 1
-    nature.js        World 2
+    anim.js          Idle-animation helper (breathing, flap, sway…)
+    universe.js nature.js animals.js ocean.js human-body.js dinosaurs.js
     index.js         World registry
 ```
 
