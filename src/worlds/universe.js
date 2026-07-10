@@ -222,6 +222,7 @@ export default {
   blurb: 'Fly the solar system, meet the Sun & 8 planets, then reach deep space.',
   unlockCost: 0,
   theme: { primary: 0x4DE3FF, secondary: 0xB26CFF, bg: 0x070B1F, light: 0xFFDFAA, ambient: 0x445588 },
+  category: 'Science & Space',
   masterTitle: 'Cosmic Master 🌌',
   subjects: SUBJECTS,
   build,

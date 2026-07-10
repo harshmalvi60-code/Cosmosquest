@@ -10,22 +10,29 @@ ExploraQuest is the evolution of the original single-file **CosmosQuest**
 prototype (preserved at [`cosmosquest-prototype.html`](./cosmosquest-prototype.html));
 the solar system is now simply **World 1**.
 
-## Worlds — all six complete
-| World | Subjects | Visual language | Unlock |
-|------|--------|--------|--------|
-| 🪐 Universe | 13 (Sun, 8 planets, 4 deep-space) | Orbiting solar system | Free |
-| 🌿 Nature | 9 ecosystems | Floating biome islands | 12 ⭐ |
-| 🦁 Animal Kingdom | 10 animals | Low-poly animals with idle animation | 24 ⭐ |
-| 🐬 Ocean Life | 8 sea creatures | Underwater scene: bubbles, caustics, sandy floor | 40 ⭐ |
-| 🫀 Human Body | 8 organs | Organs placed inside a rotatable body silhouette | 60 ⭐ |
-| 🦖 Dinosaurs | 8 (7 dinos + asteroid) | Prehistoric terrain with a smoking volcano | 84 ⭐ |
+## Worlds — 10 complete (expanding toward 20)
+The Hub groups worlds into categories; new worlds slot in automatically by
+declaring a `category`.
+
+| World | Subjects | Visual language | Unlock | Category |
+|------|--------|--------|--------|--------|
+| 🪐 Universe | 13 (Sun, 8 planets, 4 deep-space) | Orbiting solar system | Free | Science & Space |
+| 🌿 Nature | 9 ecosystems | Floating biome islands | 12 ⭐ | Nature & Life |
+| 🦁 Animal Kingdom | 10 animals | Low-poly animals with idle animation | 24 ⭐ | Nature & Life |
+| 🐬 Ocean Life | 8 sea creatures | Underwater scene: bubbles, caustics, sandy floor | 40 ⭐ | Nature & Life |
+| 🫀 Human Body | 8 organs | Organs inside a rotatable body silhouette | 60 ⭐ | People & Places |
+| 🦖 Dinosaurs | 8 (7 dinos + asteroid) | Prehistoric terrain with a smoking volcano | 84 ⭐ | Nature & Life |
+| 🐝 Bugs & Insects | 8 mini-beasts | Bug-sized garden: giant grass, dew, leaf canopy | 112 ⭐ | Nature & Life |
+| 🌱 Plants & Botany | 8 plants | Sprouts that grow to full form when tapped | 144 ⭐ | Nature & Life |
+| 🌾 Farm to Table | 8 food subjects | Sunny farmland diorama (barn, sun, fences) | 180 ⭐ | Nature & Life |
+| 🧊 Polar World | 8 frozen wonders | Tundra under a colour-shifting aurora | 220 ⭐ | Nature & Life |
 
 One shared player profile (XP, stars, rank, badges, streak, titles) carries
-across every world; each world also tracks its own completion (e.g. "6/9
-Nature"). Every subject has 4 stats, 4 facts, a WOW fact, a story-mission
-briefing, a base quiz (mixing multiple-choice, true/false and picture
-questions) and — for the five new worlds — a harder two-step `quizHard` set
-that scales in as the world is explored.
+across every world; each world also tracks its own completion. Every subject
+has 4 stats, 4 facts, a WOW fact, a story-mission briefing, a base quiz
+(mixing multiple-choice, true/false and picture questions) and — for every
+world except the preserved Universe — a harder two-step `quizHard` set that
+scales in as the world is explored.
 
 ## Game features
 - **World Hub** — the home shelf of worlds, each with icon, colour theme, live

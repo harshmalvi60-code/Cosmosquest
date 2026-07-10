@@ -327,6 +327,7 @@ export default {
   blurb: 'T-Rex, Triceratops & the giants of the ancient world.',
   unlockCost: 84,
   theme: { primary: 0x8BBE3D, secondary: 0x9A6A2F, bg: 0x14170a, light: 0xF0E4B0, ambient: 0x44502a },
+  category: 'Nature & Life',
   masterTitle: 'Dino Master 🦖',
   subjects: SUBJECTS,
   build,

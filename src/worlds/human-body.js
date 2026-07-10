@@ -273,6 +273,7 @@ export default {
   blurb: 'Heart, brain, lungs & the amazing machine that is you.',
   unlockCost: 60,
   theme: { primary: 0xFF6B81, secondary: 0xB26CFF, bg: 0x140a12, light: 0xFFD9E0, ambient: 0x5a2a3a },
+  category: 'People & Places',
   masterTitle: 'Body Master 🫀',
   subjects: SUBJECTS,
   build,

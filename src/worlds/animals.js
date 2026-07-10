@@ -362,6 +362,7 @@ export default {
   blurb: 'Lions, whales, eagles & the champions of the animal world.',
   unlockCost: 24,
   theme: { primary: 0xF2A93B, secondary: 0xE0552B, bg: 0x1a1207, light: 0xFFE6B0, ambient: 0x5a4a2a },
+  category: 'Nature & Life',
   masterTitle: 'Safari Master 🦁',
   subjects: SUBJECTS,
   build,

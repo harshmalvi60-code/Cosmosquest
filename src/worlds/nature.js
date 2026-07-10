@@ -307,6 +307,7 @@ export default {
   blurb: 'Rainforests, volcanoes, glaciers & more of Earth\'s wild places.',
   unlockCost: 12,
   theme: { primary: 0x6BCB77, secondary: 0x4BA6E8, bg: 0x08160F, light: 0xEAF7D8, ambient: 0x3a5a44 },
+  category: 'Nature & Life',
   masterTitle: 'Nature Master 🌿',
   subjects: SUBJECTS,
   build,

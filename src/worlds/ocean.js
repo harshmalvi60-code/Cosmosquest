@@ -316,6 +316,7 @@ export default {
   blurb: 'Dive with sharks, turtles, jellyfish & the deep-sea deep.',
   unlockCost: 40,
   theme: { primary: 0x2FB6D6, secondary: 0x2560C0, bg: 0x061523, light: 0x9FE0FF, ambient: 0x1a466a },
+  category: 'Nature & Life',
   masterTitle: 'Ocean Master 🌊',
   subjects: SUBJECTS,
   build,

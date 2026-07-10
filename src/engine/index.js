@@ -18,6 +18,9 @@ export function createEngine(container, { onPick } = {}) {
   let clickables = [];
 
   createPicker(renderer.domElement, camera, () => clickables, (key, mesh) => {
+    // Flag the picked subject so worlds can react (e.g. Plants grows on tap).
+    clickables.forEach((c) => { c.userData.selected = c.userData.key === key; });
+    if (current && current.onSelect) current.onSelect(key, mesh);
     if (onPick) onPick(key, mesh);
   });
 
