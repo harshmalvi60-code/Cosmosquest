@@ -8,6 +8,10 @@ import bugs from './bugs.js';
 import plants from './plants.js';
 import farm from './farm.js';
 import polar from './polar.js';
+import weather from './weather.js';
+import cultures from './cultures.js';
+import ancient from './ancient.js';
+import disasters from './disasters.js';
 
 /**
  * The world registry, in hub display order. Worlds self-declare their category
@@ -27,6 +31,11 @@ export const WORLDS = [
   plants,
   farm,
   polar,
+  // Batch 2 — Earth & Sky + People & Places expansion
+  weather,
+  cultures,
+  ancient,
+  disasters,
 ];
 
 export const WORLD_MAP = Object.fromEntries(WORLDS.map((w) => [w.key, w]));

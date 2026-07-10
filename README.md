@@ -10,7 +10,7 @@ ExploraQuest is the evolution of the original single-file **CosmosQuest**
 prototype (preserved at [`cosmosquest-prototype.html`](./cosmosquest-prototype.html));
 the solar system is now simply **World 1**.
 
-## Worlds — 10 complete (expanding toward 20)
+## Worlds — 14 complete (expanding toward 20)
 The Hub groups worlds into categories; new worlds slot in automatically by
 declaring a `category`.
 
@@ -26,6 +26,10 @@ declaring a `category`.
 | 🌱 Plants & Botany | 8 plants | Sprouts that grow to full form when tapped | 144 ⭐ | Nature & Life |
 | 🌾 Farm to Table | 8 food subjects | Sunny farmland diorama (barn, sun, fences) | 180 ⭐ | Nature & Life |
 | 🧊 Polar World | 8 frozen wonders | Tundra under a colour-shifting aurora | 220 ⭐ | Nature & Life |
+| ⛈️ Weather & Sky | 8 (Water Cycle boss) | Sky diorama: rain/snow particles, lightning, tornado | 264 ⭐ | Earth & Sky |
+| 🌍 World Cultures | 8 culture themes | Turning globe with symbolic culture objects | 312 ⭐ | People & Places |
+| 🏺 Ancient Civilizations | 8 landmarks | Monuments placed at their real lat/long on a globe | 364 ⭐ | People & Places |
+| 🌋 Natural Disasters | 8 events | Procedural event scenes; reassuring tone + safety tips | 420 ⭐ | Earth & Sky |
 
 One shared player profile (XP, stars, rank, badges, streak, titles) carries
 across every world; each world also tracks its own completion. Every subject
