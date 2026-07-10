@@ -56,9 +56,18 @@ export function createControls(domEl, camera) {
     ctrl.focus = { t0: ctrl.target.clone(), t1: target.clone(), r0: ctrl.radius, r1: radius, p: 0 };
   };
 
-  /** Advance per-frame animation (auto-spin + focus lerp). */
+  /** Advance per-frame animation (auto-spin + idle drift + focus lerp). */
+  let idleT = 0;
   ctrl.update = (dt) => {
-    if (ctrl.autoSpin) ctrl.theta += dt * 0.05;
+    if (ctrl.autoSpin) {
+      // Cinematic idle: slow spin plus a gentle bob and zoom "breath" so the
+      // scene feels alive before the first touch. The deltas are derivatives
+      // of bounded sine waves, so the drift never wanders off.
+      idleT += dt;
+      ctrl.theta += dt * 0.05;
+      ctrl.phi += Math.cos(idleT * 0.45) * 0.016 * dt;
+      ctrl.radius += Math.cos(idleT * 0.3) * 0.9 * dt;
+    }
     if (ctrl.focus) {
       ctrl.focus.p = Math.min(1, ctrl.focus.p + dt * 2.2);
       const e = 1 - Math.pow(1 - ctrl.focus.p, 3);

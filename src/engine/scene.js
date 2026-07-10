@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { discTexture } from './ambience.js';
 
 /**
  * Sets up the world-agnostic Three.js stage: renderer, scene, camera, shared
@@ -22,7 +23,8 @@ export function createStage(container) {
   // Gradient sky dome (recoloured per world).
   const sky = new THREE.Mesh(
     new THREE.SphereGeometry(900, 32, 20),
-    new THREE.MeshBasicMaterial({ side: THREE.BackSide, depthWrite: false }),
+    // fog:false — the dome IS the backdrop; depth fog must not wash it out.
+    new THREE.MeshBasicMaterial({ side: THREE.BackSide, depthWrite: false, fog: false }),
   );
   scene.add(sky);
 
@@ -33,7 +35,7 @@ export function createStage(container) {
   scene.add(stars);
 
   // Drifting glow motes — soft floating dust that gives the scene life & depth.
-  const motesMat = new THREE.PointsMaterial({ color: 0x4DE3FF, size: 2.6, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending, depthWrite: false });
+  const motesMat = new THREE.PointsMaterial({ color: 0x4DE3FF, size: 2.6, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, map: discTexture(THREE) });
   const mg = new THREE.BufferGeometry();
   const mn = 240, mp = new Float32Array(mn * 3);
   for (let i = 0; i < mn; i++) { const r = 40 + Math.random() * 130; const a = Math.random() * Math.PI * 2, b = Math.acos(2 * Math.random() - 1); mp[i * 3] = r * Math.sin(b) * Math.cos(a); mp[i * 3 + 1] = r * Math.cos(b) * 0.5 + 20; mp[i * 3 + 2] = r * Math.sin(b) * Math.sin(a); }
@@ -43,6 +45,9 @@ export function createStage(container) {
 
   const ambient = new THREE.AmbientLight(0x445588, 0.75);
   scene.add(ambient);
+  // Sky/ground bounce — lifts the dark undersides so shapes read as solid 3D.
+  const hemi = new THREE.HemisphereLight(0x9FBFFF, 0x584838, 0.55);
+  scene.add(hemi);
   const keyLight = new THREE.PointLight(0xFFDFAA, 2.2, 600);
   keyLight.position.set(60, 90, 60);
   scene.add(keyLight);
@@ -77,7 +82,7 @@ function makePoints(count, spread, color, size, opacity, attenuate) {
   const pos = new Float32Array(count * 3);
   for (let i = 0; i < count * 3; i++) pos[i] = (Math.random() - 0.5) * spread;
   g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  return new THREE.Points(g, new THREE.PointsMaterial({ color, size, sizeAttenuation: attenuate, transparent: true, opacity }));
+  return new THREE.Points(g, new THREE.PointsMaterial({ color, size, sizeAttenuation: attenuate, transparent: true, opacity, fog: false, map: discTexture(THREE), depthWrite: false }));
 }
 
 /* ---- small colour helpers (operate on 0xRRGGBB ints) ---- */

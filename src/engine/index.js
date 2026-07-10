@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { createStage } from './scene.js';
 import { createControls } from './controls.js';
 import { createPicker } from './raycast.js';
+import { createAmbience, WORLD_WEATHER } from './ambience.js';
 
 /**
  * The Engine owns the reusable 3D stage and swaps whole worlds in and out.
@@ -13,6 +14,7 @@ export function createEngine(container, { onPick } = {}) {
   const stage = createStage(container);
   const { renderer, scene, camera } = stage;
   const controls = createControls(renderer.domElement, camera);
+  const ambience = createAmbience(THREE, scene);
 
   let current = null;      // { group, clickables, update }
   let clickables = [];
@@ -41,6 +43,10 @@ export function createEngine(container, { onPick } = {}) {
     if (theme.light != null) stage.keyLight.color.set(theme.light);
     if (theme.ambient != null) stage.ambient.color.set(theme.ambient);
     stage.applyAtmosphere(theme);
+    // Ambient weather (leaves / snow / embers / bubbles / code-rain…) + a hint
+    // of depth fog in the world's own colour so far objects recede naturally.
+    ambience.set(world.ambience || WORLD_WEATHER[world.key]);
+    scene.fog = new THREE.FogExp2(theme.bg ?? 0x070B1F, 0.0007); // just a whisper of depth
 
     const home = built.home || { radius: 118 };
     controls.target.set(0, 0, 0);
@@ -74,7 +80,8 @@ export function createEngine(container, { onPick } = {}) {
     const dt = Math.min(clock.getDelta(), 0.05);
     const t = clock.elapsedTime;
     if (current && current.update) current.update(dt, t, camera);
-    // Ambient life: drift the glow motes and slowly turn the sky.
+    // Ambient life: weather particles, drifting glow motes, slowly turning sky.
+    ambience.update(dt, t);
     if (stage.motes) { stage.motes.rotation.y += dt * 0.03; stage.motes.position.y = Math.sin(t * 0.3) * 3; stage.motes.material.opacity = 0.4 + Math.sin(t * 0.8) * 0.12; }
     if (stage.sky) stage.sky.rotation.y += dt * 0.006;
     controls.update(dt);
