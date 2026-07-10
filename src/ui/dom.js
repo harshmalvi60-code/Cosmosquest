@@ -11,10 +11,10 @@ export function buildDOM(root) {
     <div class="stars" id="twinkles"></div>
     <div class="rocket">🚀</div>
     <h1 class="logo">ExploraQuest</h1>
-    <p class="tag">Six worlds to discover. Explore <b>real 3D scenes</b>, tap glowing subjects,
-      complete missions, earn ⭐ stars and 🏅 badges, and become a <b>Master Explorer</b>.</p>
+    <p class="tag"><b>20 worlds</b> to discover! Explore <b>3D scenes</b>, tap glowing subjects,
+      play quiz missions, earn ⭐ stars &amp; 🏅 badges, and become a <b>Master Explorer</b>.</p>
     <button id="playBtn">▶ &nbsp;Start Exploring</button>
-    <p class="startHint">Drag to look around · Pinch or scroll to zoom · Tap anything glowing</p>
+    <p class="startHint">🔊 Sound on · Drag to look · Pinch to zoom · Tap anything glowing</p>
   </div>
 
   <div id="hub">
@@ -56,6 +56,7 @@ export function buildDOM(root) {
     <div class="chip streakChip" id="streakChip">🔥 <span id="streakCount">0</span></div>
     <div class="chip titleChip" id="titleChip"><span id="titleText"></span></div>
     <div id="hudRight">
+      <button id="muteBtn" title="Sound on/off">🔊</button>
       <button id="collectBtn" title="My Collection">🏅</button>
       <button id="backHub">🗺️ <span class="lbl">Worlds</span></button>
     </div>
@@ -87,7 +88,11 @@ export function buildDOM(root) {
     <div class="qKind" id="qKind"></div>
     <div class="qQ" id="qQ"></div>
     <div id="qOpts"></div>
-    <div class="qFeed" id="qFeed"></div>
+    <div class="qFeedRow">
+      <div class="qBuddy" id="qBuddy">🦊</div>
+      <div class="qFeed" id="qFeed"></div>
+      <div class="qCombo" id="qCombo"></div>
+    </div>
   </div></div>
 
   <div id="reward"><div class="rCard">

@@ -35,11 +35,12 @@ export function createEngine(container, { onPick } = {}) {
     current = built;
     clickables = built.clickables;
 
-    // Per-world background + lighting tint.
+    // Per-world background + lighting tint + atmosphere (sky, motes, rim light).
     const theme = world.theme || {};
     scene.background = new THREE.Color(theme.bg ?? 0x070B1F);
     if (theme.light != null) stage.keyLight.color.set(theme.light);
     if (theme.ambient != null) stage.ambient.color.set(theme.ambient);
+    stage.applyAtmosphere(theme);
 
     const home = built.home || { radius: 118 };
     controls.target.set(0, 0, 0);
@@ -73,6 +74,9 @@ export function createEngine(container, { onPick } = {}) {
     const dt = Math.min(clock.getDelta(), 0.05);
     const t = clock.elapsedTime;
     if (current && current.update) current.update(dt, t, camera);
+    // Ambient life: drift the glow motes and slowly turn the sky.
+    if (stage.motes) { stage.motes.rotation.y += dt * 0.03; stage.motes.position.y = Math.sin(t * 0.3) * 3; stage.motes.material.opacity = 0.4 + Math.sin(t * 0.8) * 0.12; }
+    if (stage.sky) stage.sky.rotation.y += dt * 0.006;
     controls.update(dt);
     renderer.render(scene, camera);
   }

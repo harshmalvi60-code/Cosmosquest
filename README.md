@@ -46,6 +46,18 @@ has 4 stats, 4 facts, a WOW fact, a story-mission briefing, a base quiz
 world except the preserved Universe — a harder two-step `quizHard` set that
 scales in as the world is explored.
 
+## Game feel (juice & sound)
+- **Procedural soundtrack** — generative background music and all SFX (taps,
+  correct/wrong, star, badge, rank-up, unlock, celebration) are synthesised live
+  with the Web Audio API. Zero downloaded audio; each world has its own musical
+  mood. A 🔊/🔇 button in the HUD mutes and remembers the choice.
+- **Reacting mascot** — a buddy in the quiz cheers correct answers and winces on
+  misses; a **combo counter** rewards streaks ("🔥 3 in a row!").
+- **Confetti, score pops, screen flash, shake and haptics** on correct answers,
+  rewards, badges, unlocks and world completions.
+- **Atmosphere on every world** — a per-world gradient sky, drifting glow motes
+  and a coloured rim light give all 20 worlds depth and their own look.
+
 ## Game features
 - **World Hub** — the home shelf of worlds, each with icon, colour theme, live
   progress and lock/unlock state.

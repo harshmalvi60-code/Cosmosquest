@@ -105,7 +105,7 @@ canvas{display:block}
   padding:calc(12px + env(safe-area-inset-top)) 14px 12px;pointer-events:none;opacity:0;transition:opacity .5s}
 body.playing #hud{opacity:1}
 .chip{pointer-events:auto;display:flex;align-items:center;gap:8px;background:var(--panel);
-  border:1px solid var(--line);border-radius:16px;padding:8px 14px;backdrop-filter:blur(8px)}
+  border:1px solid var(--line);border-radius:16px;padding:8px 14px;backdrop-filter:blur(8px);min-width:0}
 .chip.tap{transition:transform .12s}.chip.tap:active{transform:scale(.94)}
 .rankIcon{font-size:22px}
 .rankName{font-family:'Fredoka';font-size:14px;color:var(--cyan);line-height:1}
@@ -118,7 +118,7 @@ body.playing #hud{opacity:1}
 .streakChip{font-family:'Fredoka';font-size:15px;color:#FF9F5B}
 .titleChip{font-family:'Fredoka';font-size:14px;color:var(--gold);
   border-color:rgba(255,201,60,.4);background:linear-gradient(120deg,rgba(255,201,60,.14),rgba(178,108,255,.12))}
-#hudRight{margin-left:auto;display:flex;gap:8px;align-items:center}
+#hudRight{margin-left:auto;display:flex;gap:8px;align-items:center;flex-shrink:0}
 #backHub{pointer-events:auto;background:var(--panel);color:var(--cyan);
   border:1px solid var(--line);font-size:13px;padding:9px 15px;border-radius:14px;display:flex;align-items:center;gap:6px}
 #collectBtn{pointer-events:auto;background:var(--panel);color:var(--gold);
@@ -273,10 +273,51 @@ body.playing #hint{opacity:1}
   background:linear-gradient(120deg,var(--accent),#fff);padding:13px 42px;border-radius:999px}
 
 @media(max-width:640px){
-  .xpWrap{max-width:96px}.rankSub{display:none}
-  #backHub span.lbl{display:none}
+  #hud{gap:6px;padding-left:9px;padding-right:9px}
+  .chip{padding:7px 9px}
+  .xpWrap{max-width:74px}.rankSub{display:none}.rankName{display:none}
+  #hudRight{gap:6px}
+  #muteBtn,#collectBtn{padding:8px 9px;font-size:14px}
+  #backHub{padding:8px 10px}#backHub span.lbl{display:none}
   #hint{font-size:11px;bottom:12px}
   .pHead{padding:calc(16px + env(safe-area-inset-top)) 16px 12px}.pBody{padding:14px 16px}
   .pFoot{padding:12px 16px calc(16px + env(safe-area-inset-bottom))}
 }
+/* ---------- FUN PASS: sound button, mascot, juice ---------- */
+#muteBtn{pointer-events:auto;background:var(--panel);color:var(--white);border:1px solid var(--line);
+  font-size:15px;padding:9px 12px;border-radius:14px}
+#muteBtn:active{transform:scale(.9)}
+
+/* Quiz mascot buddy + combo */
+.qFeedRow{display:flex;align-items:center;gap:10px;margin-top:8px;min-height:34px}
+.qBuddy{font-size:30px;line-height:1;flex-shrink:0;transition:transform .2s}
+.qBuddy.happy{animation:buddyPop .5s cubic-bezier(.3,1.7,.5,1)}
+.qBuddy.oops{animation:buddyShake .4s}
+.qBuddy.think{opacity:.85}
+@keyframes buddyPop{0%{transform:scale(.6) rotate(-8deg)}50%{transform:scale(1.35) rotate(8deg)}100%{transform:scale(1)}}
+@keyframes buddyShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px) rotate(-6deg)}75%{transform:translateX(5px) rotate(6deg)}}
+.qFeed{flex:1}
+.qCombo{font-family:'Fredoka';font-size:14px;color:#FF9F5B;white-space:nowrap;font-weight:600}
+.qCombo:not(:empty){animation:buddyPop .4s}
+
+/* option buttons: bouncier press */
+.qOpt:active,.tfBtn:active,.picBtn:active{transform:scale(.96)}
+.qOpt.right,.tfBtn.right,.picBtn.right{animation:rightPop .4s cubic-bezier(.3,1.6,.5,1)}
+@keyframes rightPop{0%{transform:scale(1)}40%{transform:scale(1.05)}100%{transform:scale(1)}}
+.worldCard:not(.locked):active{transform:scale(.97)}
+.missionBtn,.bBtn,.rBtn,.cvBtn{will-change:transform}
+
+/* FX overlay (confetti, pops, flash) */
+#fxLayer{position:fixed;inset:0;z-index:70;pointer-events:none;overflow:hidden}
+.confBit{position:absolute;top:0;left:0;width:11px;height:14px;border-radius:2px;will-change:transform,opacity}
+.scorePop{position:absolute;transform:translate(-50%,-50%);font-family:'Fredoka';font-size:34px;font-weight:700;
+  text-shadow:0 2px 12px rgba(0,0,0,.5);animation:scorePop 1.2s ease-out forwards;pointer-events:none}
+@keyframes scorePop{0%{opacity:0;transform:translate(-50%,-30%) scale(.5)}
+  20%{opacity:1;transform:translate(-50%,-60%) scale(1.15)}100%{opacity:0;transform:translate(-50%,-160%) scale(1)}}
+.fxFlash{position:absolute;inset:0;animation:fxFlash .36s ease-out forwards}
+@keyframes fxFlash{0%{opacity:.9}100%{opacity:0}}
+.shake{animation:cardShake .45s cubic-bezier(.36,.07,.19,.97)}
+@keyframes cardShake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}
+  30%,50%,70%{transform:translateX(-8px)}40%,60%{transform:translateX(8px)}}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

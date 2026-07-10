@@ -13,6 +13,8 @@ import { showBriefing, runQuiz } from './ui/quiz.js';
 import { showReward } from './ui/reward.js';
 import { renderCollection } from './ui/collection.js';
 import { celebrateWorld } from './ui/celebrate.js';
+import { sfx, startMusic, setMood, unlockAudio, toggleMute, isMuted } from './game/audio.js';
+import { confetti } from './ui/fx.js';
 
 /* ---------- boot ---------- */
 buildDOM(document.getElementById('app'));
@@ -37,8 +39,15 @@ function applyTheme(world) {
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', hex(t.bg ?? 0x070B1F));
 }
 
+/* ---------- sound ---------- */
+$('muteBtn').textContent = isMuted() ? '🔇' : '🔊';
+$('muteBtn').onclick = () => { const m = toggleMute(); $('muteBtn').textContent = m ? '🔇' : '🔊'; sfx.tap(); };
+
 /* ---------- screen flow ---------- */
 $('playBtn').onclick = () => {
+  unlockAudio();
+  if (!isMuted()) startMusic();
+  sfx.start();
   $('start').classList.add('hide');
   openHub();
 };
@@ -60,8 +69,11 @@ function handleLockedTap(world) {
     unlockWorld(state, world);
     saveState(state);
     renderHubNow();
+    sfx.unlock();
+    confetti(window.innerWidth / 2, window.innerHeight / 2, 40);
     toast(`🔓 ${world.name} unlocked! Dive in!`);
   } else {
+    sfx.wrong();
     toast(`Earn ${world.unlockCost - state.stars} more ⭐ to unlock ${world.name}!`);
   }
 }
@@ -69,6 +81,8 @@ function handleLockedTap(world) {
 function enterWorld(world) {
   currentWorld = world;
   applyTheme(world);
+  setMood(world.key);
+  sfx.whoosh();
   engine.loadWorld(world, { isDone: (k) => !!(state.done[world.key] && state.done[world.key][k]) });
   hideHub();
   document.body.classList.add('playing');
@@ -79,14 +93,15 @@ function enterWorld(world) {
 function onPick(key, mesh) {
   if (!currentWorld) return;
   currentSubjectKey = key;
+  sfx.select();
   engine.focusOn(mesh);
-  openPanel(state, currentWorld, key, { onMission: () => startMission(currentWorld, key) });
+  openPanel(state, currentWorld, key, { onMission: () => { sfx.open(); startMission(currentWorld, key); } });
 }
 
-$('pClose').onclick = () => { closePanel(); engine.resetView(); };
-$('backHub').onclick = () => { closePanel(); openHub(); };
-$('collectBtn').onclick = () => renderCollection(state, WORLDS);
-$('hubCollectBtn').onclick = () => renderCollection(state, WORLDS);
+$('pClose').onclick = () => { sfx.tap(); closePanel(); engine.resetView(); };
+$('backHub').onclick = () => { sfx.whoosh(); closePanel(); openHub(); };
+$('collectBtn').onclick = () => { sfx.open(); renderCollection(state, WORLDS); };
+$('hubCollectBtn').onclick = () => { sfx.open(); renderCollection(state, WORLDS); };
 
 /* ---------- daily challenge ---------- */
 $('dailyCard').onclick = () => {
@@ -129,6 +144,8 @@ function finishMission(world, subjectKey, correct, total, { daily, bonusStars })
     correct, total, subject, result,
     onClose: () => {
       if (result.worldComplete) {
+        sfx.celebrate();
+        confetti(window.innerWidth / 2, window.innerHeight / 2, 90);
         celebrateWorld(engine, {
           title: world.masterTitle || `${world.name} Master!`,
           subtitle: `You completed every mission in ${world.name}!`,
@@ -138,5 +155,5 @@ function finishMission(world, subjectKey, correct, total, { daily, bonusStars })
     },
   });
 
-  if (result.rankUp) setTimeout(() => toast(`🎖 RANK UP! You are now a ${result.rankUp[1]}!`), 700);
+  if (result.rankUp) setTimeout(() => { sfx.rankup(); toast(`🎖 RANK UP! You are now a ${result.rankUp[1]}!`); }, 700);
 }

@@ -1,5 +1,7 @@
 import { $ } from './dom.js';
 import { shuffle } from '../game/quiz.js';
+import { sfx } from '../game/audio.js';
+import { confetti, flash, shake, haptic } from './fx.js';
 
 /**
  * Mission briefing — a short, playful "objective" line shown before the quiz
@@ -10,13 +12,17 @@ export function showBriefing(subject, onStart) {
   $('bText').textContent = subject.mission || `Ready to become a ${subject.name} expert?`;
   $('brief').classList.add('open');
   $('bBtn').onclick = () => {
+    sfx.start();
     $('brief').classList.remove('open');
     onStart();
   };
 }
 
 const KIND_LABEL = { mc: 'Multiple Choice', tf: 'True or False?', pic: 'Which One Is It?' };
-const RIGHT_MSGS = ['🎉 Correct! You\'re a natural explorer!', '⭐ Nailed it!', '✅ Spot on, Explorer!', '🌟 Brilliant!'];
+const RIGHT_MSGS = ['🎉 Correct! You\'re a natural explorer!', '⭐ Nailed it!', '✅ Spot on, Explorer!', '🌟 Brilliant!', '🚀 Genius!', '💯 Amazing!'];
+const HAPPY = ['🥳', '😄', '🤩', '😎'];
+const OOPS = ['😅', '🤔', '🙈'];
+function buddy(face, cls) { const b = $('qBuddy'); if (!b) return; b.textContent = face; b.className = 'qBuddy ' + cls; void b.offsetWidth; }
 
 /**
  * Run a quiz to completion. Handles multiple-choice, true/false and
@@ -24,10 +30,11 @@ const RIGHT_MSGS = ['🎉 Correct! You\'re a natural explorer!', '⭐ Nailed it!
  * score via onComplete(correct, total).
  */
 export function runQuiz({ title, questions, onComplete }) {
-  let idx = 0, correct = 0;
+  let idx = 0, correct = 0, combo = 0;
   const results = [];
 
   $('qTitle').textContent = title;
+  $('qCombo').textContent = '';
   buildDots(questions.length);
   $('quiz').classList.add('open');
   render();
@@ -49,6 +56,7 @@ export function runQuiz({ title, questions, onComplete }) {
     $('qKind').textContent = KIND_LABEL[q.kind] || '';
     $('qQ').textContent = q.q;
     $('qFeed').textContent = '';
+    buddy('🤔', 'think');
     const box = $('qOpts');
     box.innerHTML = '';
 
@@ -59,7 +67,22 @@ export function runQuiz({ title, questions, onComplete }) {
 
   function finish(isRight, feedbackWrong) {
     results[idx] = isRight;
-    if (isRight) correct++;
+    if (isRight) {
+      correct++; combo++;
+      sfx.correct(combo); haptic(14);
+      flash('rgba(91,240,165,.22)');
+      buddy(HAPPY[Math.floor(Math.random() * HAPPY.length)], 'happy');
+      const b = $('qBuddy').getBoundingClientRect();
+      confetti(b.left + b.width / 2, b.top + b.height / 2, combo >= 3 ? 44 : 26);
+      $('qCombo').textContent = combo >= 2 ? `🔥 ${combo} in a row!` : '';
+    } else {
+      combo = 0;
+      sfx.wrong(); haptic([18, 40, 18]);
+      flash('rgba(255,107,129,.18)');
+      shake(document.querySelector('.qCard'));
+      buddy(OOPS[Math.floor(Math.random() * OOPS.length)], 'oops');
+      $('qCombo').textContent = '';
+    }
     paintDots();
     $('qFeed').style.color = isRight ? 'var(--green)' : 'var(--red)';
     $('qFeed').textContent = isRight

@@ -1,8 +1,11 @@
 import { $ } from './dom.js';
+import { sfx } from '../game/audio.js';
+import { confetti, scorePop, haptic } from './fx.js';
 
 /**
  * Post-mission reward card. Reflects the actual score and shows any newly
- * earned collectible badge. `result` is the summary from recordMission().
+ * earned collectible badge — now with a fanfare, a star pop and confetti for
+ * that satisfying pay-off. `result` is the summary from recordMission().
  */
 export function showReward({ correct, total, subject, result, onClose }) {
   $('rBig').textContent = result.perfect ? '🏆' : result.passed ? '🏅' : '💫';
@@ -23,5 +26,17 @@ export function showReward({ correct, total, subject, result, onClose }) {
     : '';
 
   $('reward').classList.add('open');
-  $('rBtn').onclick = () => { $('reward').classList.remove('open'); onClose && onClose(); };
+
+  // Sound + juice, scaled to how well it went.
+  if (result.passed) {
+    (result.perfect ? sfx.reward : sfx.star)();
+    haptic(result.perfect ? [30, 40, 30] : 20);
+    if (result.starGain) setTimeout(() => scorePop(`+${result.starGain} ⭐`, window.innerWidth / 2, window.innerHeight / 2 - 40), 250);
+    if (result.perfect) setTimeout(() => confetti(window.innerWidth / 2, window.innerHeight / 2 - 60, 60), 150);
+    if (result.newBadge) setTimeout(() => { sfx.unlock(); confetti(window.innerWidth / 2, window.innerHeight / 2 + 30, 30, ['#FFC93C', '#5BF0A5']); }, 650);
+  } else {
+    sfx.pop();
+  }
+
+  $('rBtn').onclick = () => { sfx.tap(); $('reward').classList.remove('open'); onClose && onClose(); };
 }
