@@ -10,7 +10,7 @@ ExploraQuest is the evolution of the original single-file **CosmosQuest**
 prototype (preserved at [`cosmosquest-prototype.html`](./cosmosquest-prototype.html));
 the solar system is now simply **World 1**.
 
-## Worlds — 17 complete (expanding toward 20)
+## Worlds — all 20 complete 🎉
 The Hub groups worlds into categories; new worlds slot in automatically by
 declaring a `category`.
 
@@ -33,6 +33,11 @@ declaring a `category`.
 | 🚀 Space Explorers | 8 (ISS, rover…) | Orbit scene with procedural space tech | 480 ⭐ | Science & Space |
 | 🧠 Mind & Senses | 8 (perception) | Friendly symbols for memory, dreams, emotions… | 544 ⭐ | People & Places |
 | ⚡ Physics & Forces | 8 forces | Physics sandbox — each force demos on tap | 612 ⭐ | Science & Space |
+| 🧪 Chemistry & Matter | 8 (matter/atoms) | Lab bench; particles morph solid→liquid→gas | 684 ⭐ | Science & Space |
+| 💻 Digital World | 8 (code/AI/data) | Cyan blueprint-wireframe aesthetic | 760 ⭐ | Ideas & Machines |
+| ⚙️ Machines & Inventions | 8 inventions | Amber workshop; parts assemble on tap | 840 ⭐ | Ideas & Machines |
+
+**Totals:** 20 worlds · 168 subjects · 5 hub categories.
 
 One shared player profile (XP, stars, rank, badges, streak, titles) carries
 across every world; each world also tracks its own completion. Every subject

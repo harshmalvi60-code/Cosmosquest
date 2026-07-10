@@ -15,6 +15,9 @@ import disasters from './disasters.js';
 import spaceexplorers from './space-explorers.js';
 import mind from './mind.js';
 import physics from './physics.js';
+import chemistry from './chemistry.js';
+import digital from './digital.js';
+import machines from './machines.js';
 
 /**
  * The world registry, in hub display order. Worlds self-declare their category
@@ -43,6 +46,10 @@ export const WORLDS = [
   spaceexplorers,
   mind,
   physics,
+  // Batch 4 — Science + Ideas & Machines (completes all 20 worlds)
+  chemistry,
+  digital,
+  machines,
 ];
 
 export const WORLD_MAP = Object.fromEntries(WORLDS.map((w) => [w.key, w]));
