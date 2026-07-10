@@ -26,6 +26,7 @@ const UNCATEGORIZED = 'More Worlds';
  */
 export function renderHub(state, worlds, { onEnter, onLockedTap } = {}) {
   const { rank } = rankFor(state.xp);
+  $('hubHello').textContent = `${state.avatar || '👋'} Hi, Explorer!`;
   $('hubRank').innerHTML = `${rank[2]} <span>${rank[1].split(' ')[0]}</span>`;
   $('hubStars').textContent = state.stars;
   $('hubStreak').textContent = state.streak.count;
@@ -151,8 +152,10 @@ function makeCard(state, world, { onEnter, onLockedTap }) {
 export function showHub() {
   $('hub').classList.add('open');
   document.body.classList.remove('playing');
+  document.body.classList.add('shell'); // app shell = bottom tab bar visible
   $('panel').classList.remove('open');
 }
 export function hideHub() {
   $('hub').classList.remove('open');
+  document.body.classList.remove('shell');
 }

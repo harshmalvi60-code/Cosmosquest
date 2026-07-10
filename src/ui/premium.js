@@ -66,6 +66,35 @@ export function coachHide() {
   clearTimeout(coachTimer);
 }
 
+/* ---------------- achievement banners ---------------- */
+let achQueue = [], achBusy = false, achDone = null;
+/** Queue one or more earned achievements to slide in one at a time. */
+export function showAchievements(list, onAllDone) {
+  if (list && list.length) achQueue.push(...list);
+  if (onAllDone) achDone = onAllDone;
+  if (!achBusy) nextAchievement();
+}
+function nextAchievement() {
+  const banner = $('achv');
+  if (!achQueue.length) {
+    achBusy = false;
+    const done = achDone; achDone = null;
+    done && done();
+    return;
+  }
+  achBusy = true;
+  const a = achQueue.shift();
+  $('achvIcon').textContent = a.icon;
+  $('achvName').textContent = a.name;
+  banner.classList.add('show');
+  sfx.unlock();
+  confetti(window.innerWidth / 2, 70, 26);
+  setTimeout(() => {
+    banner.classList.remove('show');
+    setTimeout(nextAchievement, 450);
+  }, 2100);
+}
+
 /* ---------------- level-up moment ---------------- */
 export function showLevelUp(rank, onClose) {
   $('luIcon').textContent = rank[2];

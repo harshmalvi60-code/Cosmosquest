@@ -50,6 +50,7 @@ export function buildDOM(root) {
   <div id="hub">
     <div class="hubTop">
       <div>
+        <div class="hubHello" id="hubHello">Hi, Explorer! 👋</div>
         <div class="hubTitle">Choose a World</div>
         <div class="worldCount" id="worldCount">1 of 20 worlds unlocked</div>
       </div>
@@ -70,12 +71,14 @@ export function buildDOM(root) {
       <div class="dcStatus" id="dcStatus">▶</div>
     </button>
     <div id="worldSections"></div>
-    <div class="hubBtnRow">
-      <button class="hubBtn" id="hubJourneyBtn">🗺️ My Journey</button>
-      <button class="hubBtn" id="hubCollectBtn">🏅 My Collection</button>
-      <button class="hubBtn" id="hubSettingsBtn">⚙️ For Grown-ups</button>
-    </div>
   </div>
+
+  <nav id="tabbar">
+    <button class="tab on" id="tabWorlds"><span class="tIco">🌍</span><span class="tLbl">Worlds</span></button>
+    <button class="tab" id="tabJourney"><span class="tIco">🗺️</span><span class="tLbl">Journey</span></button>
+    <button class="tab" id="tabBadges"><span class="tIco">🏅</span><span class="tLbl">Badges</span></button>
+    <button class="tab" id="tabGrownups"><span class="tIco">⚙️</span><span class="tLbl">Grown-ups</span></button>
+  </nav>
 
   <div id="journey">
     <div class="colHead">
@@ -190,6 +193,10 @@ export function buildDOM(root) {
     <div class="cvSub" id="cvSub"></div>
     <button class="cvBtn" id="cvBtn">🎉 Awesome!</button>
   </div>
+
+  <div id="achv"><div class="achvIcon" id="achvIcon">🏆</div>
+    <div class="achvText"><div class="achvLabel">Achievement Unlocked!</div>
+      <div class="achvName" id="achvName"></div></div></div>
 
   <div id="toast"></div>
   `;

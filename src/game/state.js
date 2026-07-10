@@ -31,6 +31,7 @@ function fresh() {
     titles: [], lastPlayed: null, flags: {},
     avatar: null, name: null, // chosen explorer buddy + name (set on first run)
     visited: {}, // worldKey -> true once opened, so we can show a "NEW" tag
+    achievements: [], // earned milestone ids
   };
 }
 

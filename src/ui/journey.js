@@ -2,6 +2,7 @@ import { $ } from './dom.js';
 import { rankFor, RANKS } from '../game/ranks.js';
 import { worldProgress, isWorldUnlocked, isWorldComplete, canAfford } from '../game/profile.js';
 import { displayStreak } from '../game/profile.js';
+import { ACHIEVEMENTS, hasAchievement } from '../game/achievements.js';
 
 function hex(n) { return '#' + n.toString(16).padStart(6, '0'); }
 
@@ -69,9 +70,23 @@ export function renderJourney(state, worlds) {
 
     <div class="jrnGoal">🎯 ${nextGoal}</div>
 
+    <div class="jrnMapLabel">Achievements <span style="font-family:'Nunito';font-size:12px;color:var(--dim)">
+      ${(state.achievements || []).length}/${ACHIEVEMENTS.length}</span></div>
+    <div class="jrnAchGrid"></div>
+
     <div class="jrnMapLabel">Your 20 worlds</div>
     <div class="jrnMap"></div>
   `;
+
+  const achGrid = body.querySelector('.jrnAchGrid');
+  ACHIEVEMENTS.forEach((a) => {
+    const got = hasAchievement(state, a.id);
+    const cell = document.createElement('div');
+    cell.className = 'jrnAch' + (got ? ' got' : '');
+    cell.innerHTML = `<div class="aIco">${a.icon}</div>
+      <div><div class="aNm">${got ? a.name : '???'}</div><div class="aDs">${a.desc}</div></div>`;
+    achGrid.appendChild(cell);
+  });
 
   const map = body.querySelector('.jrnMap');
   rows.forEach(({ world, prog }) => {

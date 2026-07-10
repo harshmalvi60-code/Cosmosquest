@@ -15,9 +15,10 @@ import { renderCollection } from './ui/collection.js';
 import { celebrateWorld } from './ui/celebrate.js';
 import { sfx, startMusic, setMood, unlockAudio, toggleMute, isMuted } from './game/audio.js';
 import { confetti } from './ui/fx.js';
-import { showAvatarPicker, coach, coachHide, showLevelUp } from './ui/premium.js';
+import { showAvatarPicker, coach, coachHide, showLevelUp, showAchievements } from './ui/premium.js';
 import { openSettings, closeSettings } from './ui/settings.js';
 import { renderJourney, closeJourney } from './ui/journey.js';
+import { checkAchievements } from './game/achievements.js';
 
 /* ---------- boot ---------- */
 buildDOM(document.getElementById('app'));
@@ -101,6 +102,7 @@ function handleLockedTap(world) {
     sfx.unlock();
     confetti(window.innerWidth / 2, window.innerHeight / 2, 40);
     toast(`🔓 ${world.name} unlocked! Dive in!`);
+    celebrateNewAchievements(1200);
   } else {
     sfx.wrong();
     toast(`Earn ${world.unlockCost - state.stars} more ⭐ to unlock ${world.name}!`);
@@ -151,25 +153,53 @@ $('qClose').onclick = () => {
 };
 $('backHub').onclick = () => { sfx.whoosh(); closePanel(); openHub(); };
 $('collectBtn').onclick = () => { sfx.open(); renderCollection(state, WORLDS); };
-$('hubCollectBtn').onclick = () => { sfx.open(); renderCollection(state, WORLDS); };
 
-/* ---------- for-grown-ups / settings ---------- */
-$('hubSettingsBtn').onclick = () => openSettings(state, {
-  onToggleSound: () => {
-    const m = toggleMute();
-    $('muteBtn').textContent = m ? '🔇' : '🔊';
-    if (!m) { startMusic(); sfx.tap(); }
-  },
-  onReset: () => {
-    try { localStorage.removeItem('exploraquest_save'); } catch { /* ignore */ }
-    location.reload();
-  },
-});
+/* ---------- app shell: bottom tab bar ---------- */
+// The hub area behaves like a real app: Worlds / Journey / Badges / Grown-ups
+// are tabs on a persistent bottom bar (only visible outside 3D play).
+function setTab(name) {
+  ['Worlds', 'Journey', 'Badges', 'Grownups'].forEach((t) => {
+    $('tab' + t).classList.toggle('on', t === name);
+  });
+}
+function closeShellScreens() {
+  closeJourney();
+  $('collection').classList.remove('open');
+  closeSettings();
+}
+$('tabWorlds').onclick = () => { sfx.tap(); closeShellScreens(); setTab('Worlds'); openHub(); };
+$('tabJourney').onclick = () => { sfx.open(); closeShellScreens(); setTab('Journey'); renderJourney(state, WORLDS); };
+$('tabBadges').onclick = () => {
+  sfx.open(); closeShellScreens(); setTab('Badges');
+  renderCollection(state, WORLDS);
+  // renderCollection wires its own ✕; extend it to restore the Worlds tab.
+  $('colClose').onclick = () => { sfx.tap(); $('collection').classList.remove('open'); setTab('Worlds'); };
+};
+$('tabGrownups').onclick = () => {
+  sfx.tap();
+  openSettings(state, {
+    onToggleSound: () => {
+      const m = toggleMute();
+      $('muteBtn').textContent = m ? '🔇' : '🔊';
+      if (!m) { startMusic(); sfx.tap(); }
+    },
+    onReset: () => {
+      try { localStorage.removeItem('exploraquest_save'); } catch { /* ignore */ }
+      location.reload();
+    },
+  });
+};
 $('setClose').onclick = () => { sfx.tap(); closeSettings(); };
+$('jrnClose').onclick = () => { sfx.tap(); closeJourney(); setTab('Worlds'); };
 
-/* ---------- my journey (progress overview) ---------- */
-$('hubJourneyBtn').onclick = () => { sfx.open(); renderJourney(state, WORLDS); };
-$('jrnClose').onclick = () => { sfx.tap(); closeJourney(); };
+/* ---------- milestones ---------- */
+function celebrateNewAchievements(delay = 900) {
+  const fresh = checkAchievements(state, WORLDS);
+  if (fresh.length) {
+    saveState(state);
+    setTimeout(() => showAchievements(fresh), delay);
+  }
+}
 
 /* ---------- daily challenge ---------- */
 $('dailyCard').onclick = () => {
@@ -205,6 +235,7 @@ function finishMission(world, subjectKey, correct, total, { daily, bonusStars })
   if (daily) markDailyDone(state, world.key, subjectKey);
   saveState(state);
   refreshHUD(state);
+  celebrateNewAchievements(1100); // banners slide in over the reward card
   refreshHubIfOpen(); // keep hub cards/daily in sync if a mission ran from the hub
   if (result.passed && currentWorld && currentWorld.key === world.key) engine.markDone(subjectKey);
 
