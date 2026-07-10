@@ -39,6 +39,15 @@ export function unlockWorld(state, world) {
   state.unlocked[world.key] = true;
 }
 
+/** A world is "NEW" while it is unlocked but has never been opened. */
+export function isWorldNew(state, world) {
+  return isWorldUnlocked(state, world) && !(state.visited && state.visited[world.key]);
+}
+export function markWorldVisited(state, world) {
+  state.visited = state.visited || {};
+  state.visited[world.key] = true;
+}
+
 /**
  * Update the consecutive-day streak — counts calendar days on which at least
  * one mission was completed. Call once per finished mission.

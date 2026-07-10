@@ -72,8 +72,38 @@ export function buildDOM(root) {
     <div id="worldSections"></div>
     <div class="hubBtnRow">
       <button class="hubBtn" id="hubCollectBtn">🏅 My Collection</button>
+      <button class="hubBtn" id="hubSettingsBtn">⚙️ For Grown-ups</button>
     </div>
   </div>
+
+  <div id="settings"><div class="setCard">
+    <div class="setHead">
+      <div class="setTitle">⚙️ For Grown-ups</div>
+      <button class="ovClose" id="setClose">✕</button>
+    </div>
+    <div class="setBody">
+      <div class="setStat" id="setStat"></div>
+      <div class="setSection">Sound</div>
+      <button class="setBtn" id="setSound">🔊 Sound is ON</button>
+      <div class="setSection">Our promise</div>
+      <div class="setPromise">
+        <div class="setPill">✅ Kid-safe content</div>
+        <div class="setPill">🚫 No ads</div>
+        <div class="setPill">💳 No purchases</div>
+        <div class="setPill">📴 Works offline</div>
+        <div class="setPill">🔒 No data leaves this device</div>
+        <div class="setPill">🖼️ No photos of real people</div>
+      </div>
+      <div class="setSection">How kids learn here</div>
+      <p class="setNote">Every world is real science, nature, history and ideas — explored in
+        3D, then locked in with a short quiz mission. Kids earn ⭐ stars and 🏅 badges,
+        build daily streaks, and rank up from Junior Explorer to Master Explorer across
+        20 worlds and 168 subjects.</p>
+      <div class="setSection">Progress</div>
+      <button class="setBtn danger" id="setReset">↺ Reset all progress</button>
+      <p class="setFine">ExploraQuest saves progress on this device only. Resetting cannot be undone.</p>
+    </div>
+  </div></div>
 
   <div id="hud">
     <div class="chip rankChip">

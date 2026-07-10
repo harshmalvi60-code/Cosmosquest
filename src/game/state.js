@@ -30,6 +30,7 @@ function fresh() {
     dailyChallenge: { subjectKey: null, worldKey: null, completedDate: null },
     titles: [], lastPlayed: null, flags: {},
     avatar: null, name: null, // chosen explorer buddy + name (set on first run)
+    visited: {}, // worldKey -> true once opened, so we can show a "NEW" tag
   };
 }
 

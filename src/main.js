@@ -2,7 +2,7 @@ import './style.css';
 import { buildDOM, $, toast } from './ui/dom.js';
 import { loadState, saveState } from './game/state.js';
 import { recordMission, worldProgress, canAfford, unlockWorld,
-  dailyChallenge, markDailyDone } from './game/profile.js';
+  dailyChallenge, markDailyDone, markWorldVisited } from './game/profile.js';
 import { buildQuiz, difficultyFor } from './game/quiz.js';
 import { createEngine } from './engine/index.js';
 import { WORLDS } from './worlds/index.js';
@@ -16,6 +16,7 @@ import { celebrateWorld } from './ui/celebrate.js';
 import { sfx, startMusic, setMood, unlockAudio, toggleMute, isMuted } from './game/audio.js';
 import { confetti } from './ui/fx.js';
 import { showAvatarPicker, coach, coachHide, showLevelUp } from './ui/premium.js';
+import { openSettings, closeSettings } from './ui/settings.js';
 
 /* ---------- boot ---------- */
 buildDOM(document.getElementById('app'));
@@ -107,6 +108,8 @@ function handleLockedTap(world) {
 
 function enterWorld(world) {
   currentWorld = world;
+  markWorldVisited(state, world); // clears the "NEW" tag next time the hub renders
+  saveState(state);
   applyTheme(world);
   setMood(world.key);
   sfx.whoosh();
@@ -148,6 +151,20 @@ $('qClose').onclick = () => {
 $('backHub').onclick = () => { sfx.whoosh(); closePanel(); openHub(); };
 $('collectBtn').onclick = () => { sfx.open(); renderCollection(state, WORLDS); };
 $('hubCollectBtn').onclick = () => { sfx.open(); renderCollection(state, WORLDS); };
+
+/* ---------- for-grown-ups / settings ---------- */
+$('hubSettingsBtn').onclick = () => openSettings(state, {
+  onToggleSound: () => {
+    const m = toggleMute();
+    $('muteBtn').textContent = m ? '🔇' : '🔊';
+    if (!m) { startMusic(); sfx.tap(); }
+  },
+  onReset: () => {
+    try { localStorage.removeItem('exploraquest_save'); } catch { /* ignore */ }
+    location.reload();
+  },
+});
+$('setClose').onclick = () => { sfx.tap(); closeSettings(); };
 
 /* ---------- daily challenge ---------- */
 $('dailyCard').onclick = () => {

@@ -1,6 +1,6 @@
 import { $ } from './dom.js';
 import { rankFor } from '../game/ranks.js';
-import { worldProgress, isWorldUnlocked, canAfford, isWorldComplete, dailyChallenge } from '../game/profile.js';
+import { worldProgress, isWorldUnlocked, canAfford, isWorldComplete, isWorldNew, dailyChallenge } from '../game/profile.js';
 
 /** Convert a 0xRRGGBB int to a CSS hex string. */
 function hex(n) { return '#' + n.toString(16).padStart(6, '0'); }
@@ -124,8 +124,11 @@ function makeCard(state, world, { onEnter, onLockedTap }) {
       <div class="lockCost ${canAfford(state, world) ? 'can' : ''}">${canAfford(state, world) ? 'Tap to unlock!' : `${world.unlockCost} ⭐ to unlock`}</div></div>`;
   }
 
+  const isNew = !soon && !complete && isWorldNew(state, world);
+
   card.innerHTML = `
     ${complete ? '<div class="wDone">🏆</div>' : ''}
+    ${isNew ? '<div class="wNew">NEW</div>' : ''}
     <div>
       <div class="wIcon">${world.icon}</div>
       <div class="wName">${world.name}</div>
