@@ -10,7 +10,7 @@ ExploraQuest is the evolution of the original single-file **CosmosQuest**
 prototype (preserved at [`cosmosquest-prototype.html`](./cosmosquest-prototype.html));
 the solar system is now simply **World 1**.
 
-## Worlds — 14 complete (expanding toward 20)
+## Worlds — 17 complete (expanding toward 20)
 The Hub groups worlds into categories; new worlds slot in automatically by
 declaring a `category`.
 
@@ -30,6 +30,9 @@ declaring a `category`.
 | 🌍 World Cultures | 8 culture themes | Turning globe with symbolic culture objects | 312 ⭐ | People & Places |
 | 🏺 Ancient Civilizations | 8 landmarks | Monuments placed at their real lat/long on a globe | 364 ⭐ | People & Places |
 | 🌋 Natural Disasters | 8 events | Procedural event scenes; reassuring tone + safety tips | 420 ⭐ | Earth & Sky |
+| 🚀 Space Explorers | 8 (ISS, rover…) | Orbit scene with procedural space tech | 480 ⭐ | Science & Space |
+| 🧠 Mind & Senses | 8 (perception) | Friendly symbols for memory, dreams, emotions… | 544 ⭐ | People & Places |
+| ⚡ Physics & Forces | 8 forces | Physics sandbox — each force demos on tap | 612 ⭐ | Science & Space |
 
 One shared player profile (XP, stars, rank, badges, streak, titles) carries
 across every world; each world also tracks its own completion. Every subject

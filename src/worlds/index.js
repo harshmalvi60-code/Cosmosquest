@@ -12,6 +12,9 @@ import weather from './weather.js';
 import cultures from './cultures.js';
 import ancient from './ancient.js';
 import disasters from './disasters.js';
+import spaceexplorers from './space-explorers.js';
+import mind from './mind.js';
+import physics from './physics.js';
 
 /**
  * The world registry, in hub display order. Worlds self-declare their category
@@ -36,6 +39,10 @@ export const WORLDS = [
   cultures,
   ancient,
   disasters,
+  // Batch 3 — Science & Space + Mind expansion
+  spaceexplorers,
+  mind,
+  physics,
 ];
 
 export const WORLD_MAP = Object.fromEntries(WORLDS.map((w) => [w.key, w]));
