@@ -46,6 +46,24 @@ export function renderHub(state, worlds, { onEnter, onLockedTap } = {}) {
 
   const container = $('worldSections');
   container.innerHTML = '';
+
+  // "Continue" rail — surface what the kid can act on right now so a fresh
+  // player taps straight into a world instead of hunting through categories:
+  // unlocked-but-unfinished worlds first, then any they can afford to unlock.
+  const playable = worlds.filter((w) => !w.comingSoon && isWorldUnlocked(state, w) && !isWorldComplete(state, w));
+  const affordable = worlds.filter((w) => !w.comingSoon && !isWorldUnlocked(state, w) && canAfford(state, w));
+  const rail = [...playable, ...affordable];
+  if (rail.length) {
+    const section = document.createElement('div');
+    section.className = 'worldSection railSection';
+    section.innerHTML = `<div class="worldSectionLabel rail">▶ Ready to Explore <span>tap to play now</span></div>`;
+    const grid = document.createElement('div');
+    grid.className = 'worldGrid';
+    rail.forEach((w) => grid.appendChild(makeCard(state, w, { onEnter, onLockedTap })));
+    section.appendChild(grid);
+    container.appendChild(section);
+  }
+
   const order = [...CATEGORY_ORDER, ...[...groups.keys()].filter((c) => !CATEGORY_ORDER.includes(c))];
   order.forEach((cat) => {
     const list = groups.get(cat);
