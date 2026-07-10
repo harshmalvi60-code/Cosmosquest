@@ -455,4 +455,51 @@ body.playing #hint{opacity:1}
 .setNote{font-size:14px;line-height:1.55;color:var(--dim);font-weight:600}
 .setFine{font-size:12px;color:var(--dim);margin-top:8px;opacity:.85}
 
+/* ---------- MY JOURNEY (progress overview) ---------- */
+#journey{position:fixed;inset:0;z-index:48;display:none;flex-direction:column;
+  background:radial-gradient(ellipse at 50% -10%,#161036 0%,var(--space) 55%);
+  padding:calc(16px + env(safe-area-inset-top)) 16px 16px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+#journey.open{display:flex}
+#jrnBody{max-width:920px;width:100%;margin:0 auto}
+.jrnHero{display:flex;align-items:center;gap:20px;background:var(--panel);border:1px solid var(--line);
+  border-radius:22px;padding:20px;margin-bottom:14px}
+.jrnRing{--p:0;flex-shrink:0;width:104px;height:104px;border-radius:50%;
+  background:conic-gradient(var(--accent) calc(var(--p)*1%),rgba(255,255,255,.08) 0);
+  display:flex;align-items:center;justify-content:center}
+.jrnRingIn{width:80px;height:80px;border-radius:50%;background:var(--space2);
+  display:flex;flex-direction:column;align-items:center;justify-content:center}
+.jrnRingIn b{font-family:'Fredoka';font-size:26px;color:var(--accent);line-height:1}
+.jrnRingIn span{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;font-weight:800}
+.jrnHeroMain{flex:1;min-width:0}
+.jrnBig{font-family:'Fredoka';font-size:30px;color:var(--white)}
+.jrnBig small{font-size:15px;color:var(--dim)}
+.jrnRank{font-size:13.5px;color:var(--gold);font-weight:700;margin:6px 0 8px}
+.jrnXp{height:9px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
+.jrnXpFill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--cyan),var(--purple));transition:width .6s}
+.jrnStats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.jrnStat{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:14px;padding:11px 8px;text-align:center}
+.jrnStat b{display:block;font-family:'Fredoka';font-size:18px;color:var(--white)}
+.jrnStat span{font-size:11px;color:var(--dim);font-weight:700}
+.jrnGoal{background:linear-gradient(120deg,rgba(255,201,60,.14),rgba(178,108,255,.12));
+  border:1px solid rgba(255,201,60,.4);border-radius:16px;padding:13px 16px;font-family:'Fredoka';
+  font-size:15px;margin-bottom:20px}
+.jrnGoal b{color:var(--gold)}
+.jrnMapLabel{font-family:'Fredoka';font-size:17px;margin-bottom:10px;border-left:3px solid var(--accent);padding-left:9px}
+.jrnMap{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;padding-bottom:24px}
+.jrnWorld{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:12px}
+.jrnWorld.locked{filter:saturate(.4) brightness(.75)}
+.jrnWorld.done{border-color:rgba(91,240,165,.4);background:linear-gradient(140deg,rgba(91,240,165,.08),rgba(255,201,60,.06))}
+.jrnWIco{font-size:30px}
+.jrnWName{font-family:'Fredoka';font-size:14px;margin:4px 0 8px;line-height:1.15}
+.jrnWBar{height:7px;border-radius:99px;background:rgba(0,0,0,.35);overflow:hidden}
+.jrnWBar div{height:100%;border-radius:99px;transition:width .5s}
+.jrnWNum{font-family:'Fredoka';font-size:12px;color:var(--dim);margin-top:6px}
+.jrnWorld.done .jrnWNum{color:var(--green)}
+@media(max-width:640px){
+  .jrnHero{gap:14px;padding:16px}.jrnRing{width:88px;height:88px}.jrnRingIn{width:66px;height:66px}
+  .jrnRingIn b{font-size:21px}.jrnBig{font-size:24px}
+  .jrnStats{grid-template-columns:repeat(3,1fr)}
+  .jrnMap{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
+}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

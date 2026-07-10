@@ -17,6 +17,7 @@ import { sfx, startMusic, setMood, unlockAudio, toggleMute, isMuted } from './ga
 import { confetti } from './ui/fx.js';
 import { showAvatarPicker, coach, coachHide, showLevelUp } from './ui/premium.js';
 import { openSettings, closeSettings } from './ui/settings.js';
+import { renderJourney, closeJourney } from './ui/journey.js';
 
 /* ---------- boot ---------- */
 buildDOM(document.getElementById('app'));
@@ -165,6 +166,10 @@ $('hubSettingsBtn').onclick = () => openSettings(state, {
   },
 });
 $('setClose').onclick = () => { sfx.tap(); closeSettings(); };
+
+/* ---------- my journey (progress overview) ---------- */
+$('hubJourneyBtn').onclick = () => { sfx.open(); renderJourney(state, WORLDS); };
+$('jrnClose').onclick = () => { sfx.tap(); closeJourney(); };
 
 /* ---------- daily challenge ---------- */
 $('dailyCard').onclick = () => {

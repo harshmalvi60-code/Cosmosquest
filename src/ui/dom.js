@@ -71,9 +71,18 @@ export function buildDOM(root) {
     </button>
     <div id="worldSections"></div>
     <div class="hubBtnRow">
+      <button class="hubBtn" id="hubJourneyBtn">🗺️ My Journey</button>
       <button class="hubBtn" id="hubCollectBtn">🏅 My Collection</button>
       <button class="hubBtn" id="hubSettingsBtn">⚙️ For Grown-ups</button>
     </div>
+  </div>
+
+  <div id="journey">
+    <div class="colHead">
+      <div class="colTitle">🗺️ My Journey</div>
+      <button class="colClose" id="jrnClose">✕</button>
+    </div>
+    <div id="jrnBody"></div>
   </div>
 
   <div id="settings"><div class="setCard">
