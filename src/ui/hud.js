@@ -5,6 +5,7 @@ import { displayStreak, activeTitle } from '../game/profile.js';
 /** Refresh the shared top HUD from the profile — rank, XP bar, stars, streak, title. */
 export function refreshHUD(state) {
   const { rank, index, next, isMax, pct, total } = rankFor(state.xp);
+  if (state.avatar) $('hudAvatar').textContent = state.avatar;
   $('rankIcon').textContent = rank[2];
   $('rankName').textContent = rank[1];
   $('rankSub').textContent = `Rank ${index} of ${total}`;

@@ -29,6 +29,7 @@ function fresh() {
     streak: { count: 0, lastDate: null },
     dailyChallenge: { subjectKey: null, worldKey: null, completedDate: null },
     titles: [], lastPlayed: null, flags: {},
+    avatar: null, name: null, // chosen explorer buddy + name (set on first run)
   };
 }
 

@@ -9,13 +9,43 @@ export function buildDOM(root) {
 
   <div id="start">
     <div class="stars" id="twinkles"></div>
-    <div class="rocket">🚀</div>
-    <h1 class="logo">ExploraQuest</h1>
-    <p class="tag"><b>20 worlds</b> to discover! Explore <b>3D scenes</b>, tap glowing subjects,
-      play quiz missions, earn ⭐ stars &amp; 🏅 badges, and become a <b>Master Explorer</b>.</p>
-    <button id="playBtn">▶ &nbsp;Start Exploring</button>
-    <p class="startHint">🔊 Sound on · Drag to look · Pinch to zoom · Tap anything glowing</p>
+    <div class="floaters" id="floaters"></div>
+    <div class="startInner">
+      <div class="rocket">🚀</div>
+      <h1 class="logo">ExploraQuest</h1>
+      <p class="startKicker">The 3D learning adventure for curious kids</p>
+      <p class="tag"><b>20 worlds</b> to discover! Fly through <b>3D scenes</b>, tap glowing subjects,
+        play quiz missions, earn ⭐ stars &amp; 🏅 badges, and become a <b>Master Explorer</b>.</p>
+      <div class="startBadges">
+        <div class="sBadge"><b>20</b><span>Worlds</span></div>
+        <div class="sBadge"><b>168</b><span>Subjects</span></div>
+        <div class="sBadge"><b>500+</b><span>Fun facts</span></div>
+        <div class="sBadge"><b>168</b><span>Badges</span></div>
+      </div>
+      <button id="playBtn">▶ &nbsp;Start Exploring</button>
+      <p class="startHint">🔊 Sound on · Kid-safe · No ads · Works offline</p>
+    </div>
   </div>
+
+  <div id="avatarPick">
+    <div class="apCard">
+      <div class="apTitle">Pick your explorer!</div>
+      <div class="apSub">Choose a buddy for your adventure</div>
+      <div class="apGrid" id="apGrid"></div>
+      <button class="apBtn" id="apBtn">Let's Go! →</button>
+    </div>
+  </div>
+
+  <div id="coach"><div class="coachBubble" id="coachBubble"></div></div>
+
+  <div id="levelup"><div class="luCard">
+    <div class="luBurst"></div>
+    <div class="luIcon" id="luIcon">👑</div>
+    <div class="luLabel">LEVEL UP!</div>
+    <div class="luName" id="luName">Star Explorer</div>
+    <div class="luSub" id="luSub">A new rank unlocked!</div>
+    <button class="luBtn" id="luBtn">Awesome! →</button>
+  </div></div>
 
   <div id="hub">
     <div class="hubTop">
@@ -46,7 +76,8 @@ export function buildDOM(root) {
   </div>
 
   <div id="hud">
-    <div class="chip">
+    <div class="chip rankChip">
+      <span class="hudAvatar" id="hudAvatar">🧑‍🚀</span>
       <span class="rankIcon" id="rankIcon">🧭</span>
       <div><div class="rankName" id="rankName">Junior Explorer</div><div class="rankSub" id="rankSub">Rank 1 of 5</div></div>
     </div>
@@ -74,6 +105,7 @@ export function buildDOM(root) {
   </div>
 
   <div id="brief"><div class="bCard">
+    <button class="ovClose" id="bClose">✕</button>
     <div class="bEmoji" id="bEmoji">🎯</div>
     <div class="bLabel">Mission Briefing</div>
     <div class="bText" id="bText"></div>
@@ -82,6 +114,7 @@ export function buildDOM(root) {
 
   <div id="quiz"><div class="qCard">
     <div class="qTop">
+      <button class="ovClose sm" id="qClose" title="Quit mission">✕</button>
       <div class="disp" style="color:var(--accent);font-size:17px" id="qTitle">Mission</div>
       <div class="qDots" id="qDots"></div>
     </div>
@@ -131,6 +164,19 @@ export function buildDOM(root) {
     s.style.animationDelay = Math.random() * 2.4 + 's';
     tw.appendChild(s);
   }
+  // Floating world emojis drifting behind the start screen.
+  const fl = root.querySelector('#floaters');
+  const EMO = ['🪐', '🦁', '🐬', '🦖', '🌋', '🐝', '🌱', '🧊', '⛈️', '🏺', '🚀', '🧠', '⚡', '🧪', '💻', '⚙️', '🌈', '🐙', '🦋', '🌍'];
+  EMO.forEach((e, i) => {
+    const s = document.createElement('span');
+    s.className = 'floater'; s.textContent = e;
+    s.style.left = (4 + (i * 4.7) % 92) + '%';
+    s.style.top = (6 + (i * 9.3) % 84) + '%';
+    s.style.fontSize = (26 + (i % 4) * 12) + 'px';
+    s.style.animationDelay = (i * 0.4) + 's';
+    s.style.animationDuration = (7 + (i % 5)) + 's';
+    fl.appendChild(s);
+  });
 }
 
 export const $ = (id) => document.getElementById(id);

@@ -320,4 +320,98 @@ body.playing #hint{opacity:1}
 @keyframes cardShake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}
   30%,50%,70%{transform:translateX(-8px)}40%,60%{transform:translateX(8px)}}
 
+/* ---------- PREMIUM PASS: start polish, avatar, coach-marks, level-up ---------- */
+.startInner{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;
+  animation:startIn .8s cubic-bezier(.2,1,.3,1)}
+@keyframes startIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.startKicker{margin-top:6px;font-family:'Fredoka';font-size:clamp(13px,2.2vw,17px);
+  color:var(--cyan);letter-spacing:.5px;opacity:.92}
+.startBadges{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:26px;max-width:520px}
+.sBadge{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:16px;
+  padding:10px 16px;min-width:82px;backdrop-filter:blur(6px)}
+.sBadge b{display:block;font-family:'Fredoka';font-size:22px;
+  background:linear-gradient(120deg,var(--cyan),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sBadge span{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;font-weight:800}
+/* drifting world emojis behind the start screen */
+.floaters{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1}
+.floater{position:absolute;opacity:.18;filter:drop-shadow(0 4px 12px rgba(0,0,0,.4));
+  animation:floaty 8s ease-in-out infinite;will-change:transform}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-26px) rotate(8deg)}}
+
+/* avatar picker */
+#avatarPick{position:fixed;inset:0;z-index:51;display:none;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 50% 0%,#1A1040 0%,rgba(4,6,18,.94) 60%);backdrop-filter:blur(8px);padding:20px}
+#avatarPick.open{display:flex}
+.apCard{width:min(460px,100%);background:var(--space2);border:1px solid var(--accent);border-radius:26px;
+  padding:28px 24px;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.6);animation:pop .4s cubic-bezier(.3,1.5,.5,1)}
+.apTitle{font-family:'Fredoka';font-size:26px;
+  background:linear-gradient(100deg,var(--cyan),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.apSub{font-size:13px;color:var(--dim);margin-top:4px}
+.apGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0 22px}
+.apCell{font-size:34px;aspect-ratio:1;border-radius:18px;background:rgba(255,255,255,.05);
+  border:2px solid rgba(255,255,255,.08);transition:transform .15s,border-color .15s,background .15s}
+.apCell:active{transform:scale(.9)}
+.apCell.on{border-color:var(--accent);background:rgba(77,227,255,.14);transform:scale(1.06);
+  box-shadow:0 0 0 3px rgba(77,227,255,.2),0 8px 22px rgba(77,227,255,.25)}
+.apBtn{font-size:19px;font-weight:600;color:var(--space);background:linear-gradient(120deg,var(--gold),#FFDF7E);
+  padding:14px 44px;border-radius:999px;box-shadow:0 10px 28px rgba(255,201,60,.35);transition:transform .15s}
+.apBtn:active{transform:scale(.96)}
+
+/* onboarding coach-marks */
+#coach{position:fixed;inset:0;z-index:58;display:none;background:rgba(4,6,18,.55);backdrop-filter:blur(1px)}
+#coach.open{display:block}
+.coachBubble{position:absolute;transform:translate(-50%,0);max-width:250px;
+  background:var(--white);color:#141A33;font-family:'Fredoka';font-size:16px;line-height:1.35;
+  border-radius:18px;padding:14px 18px;box-shadow:0 16px 44px rgba(0,0,0,.5);animation:pop .35s cubic-bezier(.3,1.6,.5,1)}
+.coachBubble.centre{transform:translate(-50%,-50%)}
+.coachBubble::after{content:"";position:absolute;left:50%;margin-left:-9px;border:9px solid transparent}
+.coachBubble.bottom::after{top:-16px;border-bottom-color:var(--white)}
+.coachBubble.top::after{bottom:-16px;border-top-color:var(--white);transform:none}
+.coachBubble.top{transform:translate(-50%,-100%)}
+.coachGot{margin-top:8px;font-size:12px;color:var(--accent2);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.coachHi{position:relative;z-index:59;box-shadow:0 0 0 4px var(--gold),0 0 30px 6px rgba(255,201,60,.7)!important;
+  border-radius:20px;animation:coachGlow 1.4s ease-in-out infinite}
+@keyframes coachGlow{0%,100%{box-shadow:0 0 0 4px var(--gold),0 0 24px 4px rgba(255,201,60,.5)}
+  50%{box-shadow:0 0 0 5px var(--gold),0 0 40px 10px rgba(255,201,60,.9)}}
+
+/* level-up moment */
+#levelup{position:fixed;inset:0;z-index:56;display:none;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 50% 40%,rgba(178,108,255,.35),rgba(4,6,18,.9) 60%);padding:20px}
+#levelup.open{display:flex}
+.luCard{position:relative;text-align:center;width:min(420px,100%);
+  background:var(--space2);border:1px solid rgba(255,201,60,.5);border-radius:30px;padding:40px 32px;
+  box-shadow:0 24px 90px rgba(0,0,0,.6);animation:pop .5s cubic-bezier(.3,1.6,.5,1);overflow:hidden}
+.luBurst{position:absolute;top:50%;left:50%;width:340px;height:340px;transform:translate(-50%,-50%);
+  background:conic-gradient(from 0deg,transparent 0 12deg,rgba(255,201,60,.16) 12deg 24deg);
+  animation:spin 9s linear infinite;pointer-events:none}
+@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.luIcon{position:relative;font-size:72px;filter:drop-shadow(0 0 24px rgba(255,201,60,.7));animation:float 2.2s ease-in-out infinite}
+.luLabel{position:relative;font-family:'Fredoka';font-size:15px;letter-spacing:3px;color:var(--gold);
+  text-transform:uppercase;margin-top:6px}
+.luName{position:relative;font-family:'Fredoka';font-size:30px;margin-top:4px;
+  background:linear-gradient(100deg,var(--cyan),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.luSub{position:relative;font-size:14px;color:var(--dim);margin-top:6px}
+.luBtn{position:relative;margin-top:22px;font-size:17px;font-weight:600;color:var(--space);
+  background:linear-gradient(120deg,var(--gold),#FFDF7E);padding:13px 42px;border-radius:999px;
+  box-shadow:0 10px 28px rgba(255,201,60,.35);transition:transform .15s}
+.luBtn:active{transform:scale(.96)}
+
+/* shared close button on overlays (brief / quiz) */
+.ovClose{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.08);color:var(--white);
+  width:34px;height:34px;border-radius:50%;font-size:15px;line-height:1;transition:transform .15s,background .15s;z-index:2}
+.ovClose:active{transform:scale(.9)}
+.ovClose:hover{background:rgba(255,255,255,.16)}
+.ovClose.sm{position:static;width:30px;height:30px;font-size:14px;flex-shrink:0}
+.bCard{position:relative}
+
+/* HUD avatar + rank chip */
+.rankChip{gap:7px}
+.hudAvatar{font-size:22px;line-height:1;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
+
+@media(max-width:640px){
+  .startBadges{gap:7px}.sBadge{padding:8px 11px;min-width:64px}.sBadge b{font-size:18px}
+  .apGrid{gap:8px}.apCell{font-size:28px;border-radius:14px}
+  .rankChip .rankIcon{display:none}
+}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

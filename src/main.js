@@ -15,6 +15,7 @@ import { renderCollection } from './ui/collection.js';
 import { celebrateWorld } from './ui/celebrate.js';
 import { sfx, startMusic, setMood, unlockAudio, toggleMute, isMuted } from './game/audio.js';
 import { confetti } from './ui/fx.js';
+import { showAvatarPicker, coach, coachHide, showLevelUp } from './ui/premium.js';
 
 /* ---------- boot ---------- */
 buildDOM(document.getElementById('app'));
@@ -49,8 +50,34 @@ $('playBtn').onclick = () => {
   if (!isMuted()) startMusic();
   sfx.start();
   $('start').classList.add('hide');
-  openHub();
+  // First run ever: pick an explorer buddy, then enter the hub with a coach-mark.
+  if (!state.avatar) {
+    setTimeout(() => showAvatarPicker(state, (avatar) => {
+      state.avatar = avatar;
+      saveState(state);
+      refreshHUD(state);
+      openHub();
+      coachHub();
+    }), 350);
+  } else {
+    openHub();
+  }
 };
+
+/* ---------- onboarding coach-marks ---------- */
+// Tapping the coach overlay always dismisses the current tip.
+$('coach').onclick = () => { sfx.tap(); coachHide(); };
+
+function coachHub() {
+  if (state.flags.coachedHub) return;
+  state.flags.coachedHub = true; saveState(state);
+  setTimeout(() => coach('Welcome, Explorer! 🌍<br>Tap a glowing world to dive in. Earn ⭐ stars to unlock all 20!'), 500);
+}
+function coachWorld() {
+  if (state.flags.coachedWorld) return;
+  state.flags.coachedWorld = true; saveState(state);
+  setTimeout(() => coach('Tap a glowing subject to open its mission! ✨', '#hint', { placement: 'top' }), 700);
+}
 
 function renderHubNow() {
   renderHub(state, WORLDS, { onEnter: enterWorld, onLockedTap: handleLockedTap });
@@ -88,10 +115,12 @@ function enterWorld(world) {
   document.body.classList.add('playing');
   $('hint').textContent = `Exploring ${world.name} — tap a glowing subject! ${world.icon}`;
   refreshHUD(state);
+  coachWorld();
 }
 
 function onPick(key, mesh) {
   if (!currentWorld) return;
+  coachHide();
   currentSubjectKey = key;
   sfx.select();
   engine.focusOn(mesh);
@@ -99,6 +128,23 @@ function onPick(key, mesh) {
 }
 
 $('pClose').onclick = () => { sfx.tap(); closePanel(); engine.resetView(); };
+
+// Back out of a mission briefing → return to the subject panel (or the hub if
+// the mission was launched from the daily challenge card).
+$('bClose').onclick = () => {
+  sfx.tap();
+  $('brief').classList.remove('open');
+  const inWorld = !$('hub').classList.contains('open');
+  if (inWorld && currentWorld && currentSubjectKey) {
+    openPanel(state, currentWorld, currentSubjectKey, { onMission: () => { sfx.open(); startMission(currentWorld, currentSubjectKey); } });
+  }
+};
+// Quit a quiz in progress → back to exploring (progress on this mission is dropped).
+$('qClose').onclick = () => {
+  sfx.tap();
+  $('quiz').classList.remove('open');
+  if (!$('hub').classList.contains('open')) engine.resetView();
+};
 $('backHub').onclick = () => { sfx.whoosh(); closePanel(); openHub(); };
 $('collectBtn').onclick = () => { sfx.open(); renderCollection(state, WORLDS); };
 $('hubCollectBtn').onclick = () => { sfx.open(); renderCollection(state, WORLDS); };
@@ -140,20 +186,23 @@ function finishMission(world, subjectKey, correct, total, { daily, bonusStars })
   refreshHubIfOpen(); // keep hub cards/daily in sync if a mission ran from the hub
   if (result.passed && currentWorld && currentWorld.key === world.key) engine.markDone(subjectKey);
 
+  const doWorldCelebrate = () => {
+    sfx.celebrate();
+    confetti(window.innerWidth / 2, window.innerHeight / 2, 90);
+    celebrateWorld(engine, {
+      title: world.masterTitle || `${world.name} Master!`,
+      subtitle: `You completed every mission in ${world.name}!`,
+      colors: [world.theme.primary, world.theme.secondary, 0xFFC93C, 0xF4F7FF],
+    });
+  };
+
   showReward({
     correct, total, subject, result,
     onClose: () => {
-      if (result.worldComplete) {
-        sfx.celebrate();
-        confetti(window.innerWidth / 2, window.innerHeight / 2, 90);
-        celebrateWorld(engine, {
-          title: world.masterTitle || `${world.name} Master!`,
-          subtitle: `You completed every mission in ${world.name}!`,
-          colors: [world.theme.primary, world.theme.secondary, 0xFFC93C, 0xF4F7FF],
-        });
-      }
+      // Big moments stack cleanly: rank-up card first, then (if earned) the
+      // world-complete celebration once the child dismisses it.
+      if (result.rankUp) showLevelUp(result.rankUp, () => { if (result.worldComplete) doWorldCelebrate(); });
+      else if (result.worldComplete) doWorldCelebrate();
     },
   });
-
-  if (result.rankUp) setTimeout(() => { sfx.rankup(); toast(`🎖 RANK UP! You are now a ${result.rankUp[1]}!`); }, 700);
 }
