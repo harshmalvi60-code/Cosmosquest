@@ -544,4 +544,76 @@ body.shell #tabbar{display:flex}
 body.shell #hub,body.shell #journey,body.shell #collection{
   padding-bottom:calc(78px + env(safe-area-inset-bottom))}
 
+/* ---------- GAME SKIN: 3D press buttons, shine, tiles ---------- */
+/* Chunky press-down buttons (bottom edge + push) — instant "game" feel. */
+#playBtn{box-shadow:0 7px 0 #1E9CBE,0 0 0 6px rgba(77,227,255,.12),0 18px 36px rgba(77,227,255,.3)}
+#playBtn:hover{transform:none}
+#playBtn:active{transform:translateY(5px);box-shadow:0 2px 0 #1E9CBE,0 0 0 6px rgba(77,227,255,.12),0 10px 22px rgba(77,227,255,.25)}
+.missionBtn,.apBtn,.luBtn{box-shadow:0 6px 0 #B8860B,0 14px 28px rgba(255,201,60,.25)}
+.missionBtn:active,.apBtn:active,.luBtn:active{transform:translateY(4px);box-shadow:0 2px 0 #B8860B,0 8px 16px rgba(255,201,60,.2)}
+.missionBtn.done{box-shadow:0 6px 0 #2E9E68}
+.missionBtn.done:active{box-shadow:0 2px 0 #2E9E68}
+.rBtn{box-shadow:0 6px 0 #1E9CBE,0 14px 28px rgba(77,227,255,.22)}
+.rBtn:active{transform:translateY(4px);box-shadow:0 2px 0 #1E9CBE}
+.bBtn,.cvBtn{box-shadow:0 6px 0 rgba(0,0,0,.32)}
+.bBtn:active,.cvBtn:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.32)}
+/* quiz answers press down like arcade keys */
+.qOpt,.tfBtn,.picBtn{box-shadow:0 4px 0 rgba(0,0,0,.42)}
+.qOpt:active,.tfBtn:active,.picBtn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.42)}
+.qOpt.right,.tfBtn.right,.picBtn.right{box-shadow:0 4px 0 rgba(30,120,80,.55)}
+.qOpt.wrong,.tfBtn.wrong,.picBtn.wrong{box-shadow:0 4px 0 rgba(150,45,60,.55)}
+
+/* shine sweep across the two hero buttons */
+#playBtn,.missionBtn{position:relative;overflow:hidden}
+#playBtn::after,.missionBtn::after{content:"";position:absolute;top:0;left:-80%;width:45%;height:100%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);
+  transform:skewX(-18deg);animation:shineSweep 3.4s ease-in-out infinite;pointer-events:none}
+@keyframes shineSweep{0%,55%{left:-80%}100%{left:140%}}
+
+/* XP bar shimmer */
+.xpFill{position:relative;overflow:hidden}
+.xpFill::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.4) 50%,transparent 70%);
+  background-size:200% 100%;animation:xpShine 2.8s linear infinite}
+@keyframes xpShine{from{background-position:200% 0}to{background-position:-120% 0}}
+
+/* world cards read as game tiles: top light + lift glow */
+.worldCard{box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 6px 18px rgba(0,0,0,.35)}
+.worldCard:not(.locked):hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 14px 32px rgba(0,0,0,.5)}
+.chip{box-shadow:0 4px 14px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.07)}
+.tab.on{box-shadow:0 0 0 1px rgba(77,227,255,.22),0 4px 16px rgba(77,227,255,.14)}
+
+/* screens slide in like an app */
+#hub.open{animation:screenIn .4s cubic-bezier(.2,1,.3,1)}
+#journey.open,#collection.open{animation:screenIn .35s cubic-bezier(.2,1,.3,1)}
+@keyframes screenIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.worldSection{animation:secIn .5s cubic-bezier(.2,1,.3,1) both}
+.worldSection:nth-child(2){animation-delay:.05s}
+.worldSection:nth-child(3){animation-delay:.1s}
+.worldSection:nth-child(4){animation-delay:.15s}
+.worldSection:nth-child(5){animation-delay:.2s}
+.worldSection:nth-child(6){animation-delay:.25s}
+@keyframes secIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+/* phones: 2-column game-tile grid (level-select feel) */
+@media(max-width:640px){
+  .worldGrid{grid-template-columns:1fr 1fr;gap:10px}
+  .worldCard{min-height:142px;padding:13px;border-radius:18px}
+  .worldCard .wIcon{font-size:32px}
+  .worldCard .wName{font-size:16px;margin-top:4px}
+  .worldCard .wBlurb{display:none}
+  .worldCard .wFoot{margin-top:9px}
+  .wLock .lockCost{font-size:12px;padding:5px 10px}
+  .wDone,.wNew{top:9px;right:9px}
+  /* a lone "Ready to Explore" card becomes a full-width hero with blurb */
+  .railSection .worldGrid.solo{grid-template-columns:1fr}
+  .railSection .worldGrid.solo .wBlurb{display:block}
+  .railSection .worldGrid.solo .worldCard{min-height:160px}
+  .railSection .worldGrid.solo .wIcon{font-size:40px}
+  /* daily card stays on one tidy line each */
+  .dcLabel{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dcTitle{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dcIcon{font-size:32px}
+}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

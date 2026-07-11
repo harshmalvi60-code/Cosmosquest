@@ -37,6 +37,21 @@ export function createEngine(container, { onPick } = {}) {
     current = built;
     clickables = built.clickables;
 
+    // Game-map pins: float each subject's emoji above its mesh so every
+    // subject is instantly recognisable (no two tap-targets look alike).
+    clickables.forEach((m, i) => {
+      const subj = world.subjects && world.subjects[m.userData.key];
+      if (!subj || !subj.emoji || m.userData.pin) return;
+      const pin = makeEmojiPin(subj.emoji);
+      const r = m.userData.markerRadius || boundingRadius(m) || 3;
+      pin.position.y = r * 2.1;
+      pin.scale.setScalar(r * 1.5);
+      pin.userData.baseY = pin.position.y;
+      pin.userData.phase = i * 1.7;
+      m.add(pin);
+      m.userData.pin = pin;
+    });
+
     // Per-world background + lighting tint + atmosphere (sky, motes, rim light).
     const theme = world.theme || {};
     scene.background = new THREE.Color(theme.bg ?? 0x070B1F);
@@ -80,6 +95,11 @@ export function createEngine(container, { onPick } = {}) {
     const dt = Math.min(clock.getDelta(), 0.05);
     const t = clock.elapsedTime;
     if (current && current.update) current.update(dt, t, camera);
+    // Bob the emoji pins so they read as living map markers.
+    clickables.forEach((m) => {
+      const p = m.userData.pin;
+      if (p) p.position.y = p.userData.baseY * (1 + Math.sin(t * 1.8 + p.userData.phase) * 0.07);
+    });
     // Ambient life: weather particles, drifting glow motes, slowly turning sky.
     ambience.update(dt, t);
     if (stage.motes) { stage.motes.rotation.y += dt * 0.03; stage.motes.position.y = Math.sin(t * 0.3) * 3; stage.motes.material.opacity = 0.4 + Math.sin(t * 0.8) * 0.12; }
@@ -90,6 +110,27 @@ export function createEngine(container, { onPick } = {}) {
   tick();
 
   return { scene, camera, controls, loadWorld, focusOn, resetView, markDone, THREE };
+}
+
+/** A billboarded sprite: the subject's emoji on a soft dark chip, game-pin style. */
+function makeEmojiPin(emoji) {
+  const c = document.createElement('canvas');
+  c.width = c.height = 128;
+  const g = c.getContext('2d');
+  // soft round chip behind the emoji so it pops on any backdrop
+  const grad = g.createRadialGradient(64, 64, 18, 64, 64, 60);
+  grad.addColorStop(0, 'rgba(8,12,34,.78)');
+  grad.addColorStop(0.75, 'rgba(8,12,34,.55)');
+  grad.addColorStop(1, 'rgba(8,12,34,0)');
+  g.fillStyle = grad;
+  g.fillRect(0, 0, 128, 128);
+  g.font = '72px sans-serif';
+  g.textAlign = 'center';
+  g.textBaseline = 'middle';
+  g.fillText(emoji, 64, 70);
+  const tex = new THREE.CanvasTexture(c);
+  const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false }));
+  return sprite;
 }
 
 function boundingRadius(mesh) {
@@ -105,7 +146,7 @@ function disposeGroup(group) {
     if (o.geometry) o.geometry.dispose();
     if (o.material) {
       const mats = Array.isArray(o.material) ? o.material : [o.material];
-      mats.forEach((m) => m.dispose());
+      mats.forEach((m) => { if (m.map) m.map.dispose(); m.dispose(); });
     }
   });
 }

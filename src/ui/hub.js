@@ -53,13 +53,13 @@ export function renderHub(state, worlds, { onEnter, onLockedTap } = {}) {
   // unlocked-but-unfinished worlds first, then any they can afford to unlock.
   const playable = worlds.filter((w) => !w.comingSoon && isWorldUnlocked(state, w) && !isWorldComplete(state, w));
   const affordable = worlds.filter((w) => !w.comingSoon && !isWorldUnlocked(state, w) && canAfford(state, w));
-  const rail = [...playable, ...affordable];
+  const rail = [...playable, ...affordable].slice(0, 4); // shelf, not a second full list
   if (rail.length) {
     const section = document.createElement('div');
     section.className = 'worldSection railSection';
     section.innerHTML = `<div class="worldSectionLabel rail">▶ Ready to Explore <span>tap to play now</span></div>`;
     const grid = document.createElement('div');
-    grid.className = 'worldGrid';
+    grid.className = 'worldGrid' + (rail.length === 1 ? ' solo' : '');
     rail.forEach((w) => grid.appendChild(makeCard(state, w, { onEnter, onLockedTap })));
     section.appendChild(grid);
     container.appendChild(section);
