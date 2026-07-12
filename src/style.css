@@ -616,6 +616,36 @@ body.shell #hub,body.shell #journey,body.shell #collection{
   .dcIcon{font-size:32px}
 }
 
+/* ---------- NAME INPUT (avatar picker) ---------- */
+.apName{width:100%;margin:0 0 18px;padding:13px 16px;border-radius:14px;text-align:center;
+  font-family:'Fredoka';font-size:17px;color:var(--white);
+  background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.14);outline:none}
+.apName:focus{border-color:var(--accent);background:rgba(77,227,255,.08)}
+.apName::placeholder{color:var(--dim);font-size:14px}
+
+/* ---------- LIGHTNING ROUND ---------- */
+.dailyCard.light{border-color:rgba(77,227,255,.5);
+  background:linear-gradient(120deg,rgba(77,227,255,.14),rgba(178,108,255,.12)),var(--space2)}
+.dailyCard.light .dcGlow{display:none}
+.dcLabel.lg{color:var(--cyan)}
+.dailyCard.light .dcStatus{color:var(--cyan)}
+#lightning{position:fixed;inset:0;z-index:52;display:none;align-items:center;justify-content:center;
+  background:rgba(4,6,18,.85);backdrop-filter:blur(6px);padding:18px}
+#lightning.open{display:flex}
+.lgCard{border-color:rgba(77,227,255,.4)}
+.lgTop{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.lgTimerWrap{flex:1;height:12px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
+.lgTimer{height:100%;width:100%;border-radius:99px;background:linear-gradient(90deg,var(--cyan),var(--gold));
+  transition:width .1s linear}
+.lgScore{font-family:'Fredoka';font-size:18px;color:var(--gold);white-space:nowrap}
+.qOpt.sm{padding:11px 14px;font-size:14.5px;margin-bottom:8px}
+.tfBtn.sm{padding:15px 10px;font-size:18px}
+.lgEnd{text-align:center;padding:10px 0 4px}
+.lgEndBig{font-size:54px;animation:buddyPop .5s cubic-bezier(.3,1.7,.5,1)}
+.lgEndTitle{font-family:'Fredoka';font-size:26px;color:var(--cyan);margin-top:6px}
+.lgEndScore{font-family:'Fredoka';font-size:17px;color:var(--white);margin-top:8px}
+.lgEndGain{font-family:'Fredoka';font-size:20px;color:var(--gold);margin:10px 0 18px}
+
 /* ---------- COMPLETE-APP PASS: short screens & landscape phones ---------- */
 /* No overlay card may ever overflow the viewport. */
 .qCard,.bCard,.rCard,.apCard,.luCard{max-height:calc(100dvh - 28px);overflow-y:auto;-webkit-overflow-scrolling:touch}

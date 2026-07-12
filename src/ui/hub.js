@@ -26,7 +26,7 @@ const UNCATEGORIZED = 'More Worlds';
  */
 export function renderHub(state, worlds, { onEnter, onLockedTap } = {}) {
   const { rank } = rankFor(state.xp);
-  $('hubHello').textContent = `${state.avatar || '👋'} Hi, Explorer!`;
+  $('hubHello').textContent = `${state.avatar || '👋'} Hi, ${state.name || 'Explorer'}!`;
   $('hubRank').innerHTML = `${rank[2]} <span>${rank[1].split(' ')[0]}</span>`;
   $('hubStars').textContent = state.stars;
   $('hubStreak').textContent = state.streak.count;

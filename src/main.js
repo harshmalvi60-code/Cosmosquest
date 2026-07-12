@@ -19,6 +19,8 @@ import { showAvatarPicker, coach, coachHide, showLevelUp, showAchievements } fro
 import { openSettings, closeSettings } from './ui/settings.js';
 import { renderJourney, closeJourney } from './ui/journey.js';
 import { checkAchievements } from './game/achievements.js';
+import { runLightning, lightningPool } from './ui/lightning.js';
+import { rankFor } from './game/ranks.js';
 
 /* ---------- boot ---------- */
 buildDOM(document.getElementById('app'));
@@ -62,8 +64,9 @@ $('playBtn').onclick = () => {
   $('start').classList.add('hide');
   // First run ever: pick an explorer buddy, then enter the hub with a coach-mark.
   if (!state.avatar) {
-    setTimeout(() => showAvatarPicker(state, (avatar) => {
+    setTimeout(() => showAvatarPicker(state, (avatar, name) => {
       state.avatar = avatar;
+      state.name = name || null;
       saveState(state);
       refreshHUD(state);
       openHub();
@@ -91,6 +94,7 @@ function coachWorld() {
 
 function renderHubNow() {
   renderHub(state, WORLDS, { onEnter: enterWorld, onLockedTap: handleLockedTap });
+  refreshLightningCard();
 }
 function refreshHubIfOpen() {
   if ($('hub').classList.contains('open')) renderHubNow();
@@ -211,6 +215,7 @@ function backOnce() {
   if (open('levelup')) { $('luBtn').click(); return true; }
   if (open('celebrate')) { $('cvBtn').click(); return true; }
   if (open('reward')) { $('rBtn').click(); return true; }
+  if (open('lightning')) { $('lgClose').click(); return true; }
   if (open('quiz')) { $('qClose').click(); return true; }
   if (open('brief')) { $('bClose').click(); return true; }
   if (open('coach')) { coachHide(); return true; }
@@ -242,6 +247,40 @@ $('dailyCard').onclick = () => {
   const subj = daily.world.subjects[daily.subjectKey];
   toast(`Today's Daily Challenge: ${subj.emoji} ${subj.name}!`);
   startMission(daily.world, daily.subjectKey, { daily: true, bonusStars: 3 });
+};
+
+/* ---------- lightning round ---------- */
+const LG_MIN = 6; // needs a small review pool: two passed missions' worth
+function refreshLightningCard() {
+  const n = lightningPool(state, WORLDS).length;
+  const ready = n >= LG_MIN;
+  $('lightCard').classList.toggle('done', !ready);
+  $('lgHubTitle').textContent = ready
+    ? '45 seconds of quick-fire review!'
+    : 'Pass 2 missions to unlock!';
+  $('lgHubStatus').textContent = ready ? '▶' : '🔒';
+}
+$('lightCard').onclick = () => {
+  if (lightningPool(state, WORLDS).length < LG_MIN) {
+    sfx.wrong();
+    toast('⚡ Pass 2 missions first — then race the clock!');
+    return;
+  }
+  sfx.open();
+  runLightning(state, WORLDS, {
+    onCollect: (correct) => {
+      const before = rankFor(state.xp).index;
+      state.stars += correct;
+      state.xp += correct * 4;
+      saveState(state);
+      refreshHUD(state);
+      refreshHubIfOpen();
+      toast(`⚡ Lightning done! +${correct} ⭐`);
+      const after = rankFor(state.xp);
+      if (after.index > before) showLevelUp(after.rank);
+      celebrateNewAchievements(600);
+    },
+  });
 };
 
 /* ---------- mission flow ---------- */

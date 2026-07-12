@@ -32,6 +32,7 @@ export function buildDOM(root) {
       <div class="apTitle">Pick your explorer!</div>
       <div class="apSub">Choose a buddy for your adventure</div>
       <div class="apGrid" id="apGrid"></div>
+      <input class="apName" id="apName" maxlength="12" autocomplete="off" placeholder="Your name (optional)">
       <button class="apBtn" id="apBtn">Let's Go! →</button>
     </div>
   </div>
@@ -69,6 +70,14 @@ export function buildDOM(root) {
         <div class="dcTitle" id="dcTitle">Tap to play today's mission!</div>
       </div>
       <div class="dcStatus" id="dcStatus">▶</div>
+    </button>
+    <button class="dailyCard light" id="lightCard">
+      <div class="dcIcon">⚡</div>
+      <div class="dcMain">
+        <div class="dcLabel lg">Lightning Round · <span>+1 ⭐ per answer</span></div>
+        <div class="dcTitle" id="lgHubTitle">45 seconds of quick-fire review!</div>
+      </div>
+      <div class="dcStatus" id="lgHubStatus">▶</div>
     </button>
     <div id="worldSections"></div>
   </div>
@@ -168,6 +177,20 @@ export function buildDOM(root) {
       <div class="qFeed" id="qFeed"></div>
       <div class="qCombo" id="qCombo"></div>
     </div>
+  </div></div>
+
+  <div id="lightning"><div class="qCard lgCard">
+    <div class="lgTop">
+      <button class="ovClose sm" id="lgClose" title="Quit">✕</button>
+      <div class="lgTimerWrap"><div class="lgTimer" id="lgTimer"></div></div>
+      <div class="lgScore" id="lgScore">⭐ 0</div>
+    </div>
+    <div class="lgPlay" id="lgPlay">
+      <div class="qKind" id="lgKind"></div>
+      <div class="qQ" id="lgQ"></div>
+      <div id="lgOpts"></div>
+    </div>
+    <div class="lgEnd" id="lgEnd"></div>
   </div></div>
 
   <div id="reward"><div class="rCard">

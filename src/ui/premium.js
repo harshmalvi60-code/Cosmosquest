@@ -15,22 +15,23 @@ export function showAvatarPicker(state, onDone) {
   const grid = $('apGrid');
   grid.innerHTML = '';
   let chosen = state.avatar || AVATARS[0];
-  AVATARS.forEach((a) => {
+  AVATARS.forEach((a, i) => {
     const b = document.createElement('button');
     b.className = 'apCell' + (a === chosen ? ' on' : '');
     b.textContent = a;
     b.onclick = () => {
       chosen = a; sfx.select();
-      [...grid.children].forEach((c) => c.classList.toggle('on', c.textContent === a));
+      [...grid.children].forEach((c, j) => c.classList.toggle('on', j === i));
     };
     grid.appendChild(b);
   });
   $('avatarPick').classList.add('open');
+  $('apName').value = state.name || '';
   $('apBtn').onclick = () => {
     sfx.reward();
     confetti(window.innerWidth / 2, window.innerHeight / 2, 40);
     $('avatarPick').classList.remove('open');
-    onDone(chosen);
+    onDone(chosen, $('apName').value.trim().slice(0, 12));
   };
 }
 
