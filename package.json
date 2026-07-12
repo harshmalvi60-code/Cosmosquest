@@ -1,0 +1,17 @@
+{
+  "name": "exploraquest",
+  "version": "1.0.0",
+  "description": "ExploraQuest — a 3D play-and-learn discovery game for kids across many worlds.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}
