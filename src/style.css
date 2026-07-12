@@ -616,4 +616,33 @@ body.shell #hub,body.shell #journey,body.shell #collection{
   .dcIcon{font-size:32px}
 }
 
+/* ---------- COMPLETE-APP PASS: short screens & landscape phones ---------- */
+/* No overlay card may ever overflow the viewport. */
+.qCard,.bCard,.rCard,.apCard,.luCard{max-height:calc(100dvh - 28px);overflow-y:auto;-webkit-overflow-scrolling:touch}
+.setCard{max-height:calc(100dvh - 28px)}
+
+@media(max-height:520px){
+  /* landscape phone: compress the tall screens so everything stays reachable */
+  #start{padding:12px}
+  .rocket{font-size:34px;margin-bottom:2px}
+  .logo{font-size:clamp(30px,7vh,44px)}
+  .tag{display:none}
+  .startKicker{margin-top:2px;font-size:12px}
+  .startBadges{margin-top:10px;gap:7px}
+  .sBadge{padding:6px 10px;min-width:60px}.sBadge b{font-size:16px}
+  #playBtn{margin-top:14px;padding:11px 36px;font-size:17px}
+  .startHint{margin-top:8px;font-size:11px}
+  .apGrid{grid-template-columns:repeat(6,1fr);gap:7px;margin:12px 0 14px}
+  .apTitle{font-size:20px}
+  .bEmoji{font-size:38px}.bText{font-size:15px;margin:8px 0 14px}
+  .rBig{font-size:40px}.rTitle{font-size:22px}.rCard{padding:22px 26px}
+  .qCard{padding:16px 20px}.qQ{font-size:16.5px;margin-bottom:10px}
+  .qOpt{padding:9px 14px;font-size:14px;margin-bottom:7px}
+  .tfBtn{padding:12px 10px;font-size:16px}
+  .luIcon{font-size:46px}.luName{font-size:23px}.luCard{padding:24px 26px}
+  #hint{display:none}
+  #hud{gap:6px;padding-top:calc(6px + env(safe-area-inset-top))}
+  .jrnHero{padding:12px;gap:12px}
+}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

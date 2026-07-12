@@ -46,7 +46,31 @@ has 4 stats, 4 facts, a WOW fact, a story-mission briefing, a base quiz
 world except the preserved Universe — a harder two-step `quizHard` set that
 scales in as the world is explored.
 
+## A complete app
+- **Installable PWA** — web-app manifest + procedural SVG icon; "Add to Home
+  Screen" gives a standalone full-screen app, and a service worker caches the
+  shell and assets so the game **really works offline** after the first visit.
+- **App-shell navigation** — a bottom tab bar (Worlds / Journey / Badges /
+  Grown-ups) on every non-3D screen, hidden during play.
+- **Hardware back button** — browser/phone back peels the top-most layer
+  (quiz → briefing → panel → world → hub) like a native app and stays
+  trapped in-app at the hub. Every overlay also has its own ✕.
+- **Fully responsive** — portrait & landscape phones, tablets and desktop;
+  overlay cards never overflow short screens.
+- **For Grown-ups panel** — progress stats, sound switch, safety promises
+  (no ads, no purchases, local-only data) and a two-tap-guarded reset.
+- **My Journey** — overall % explored, rank progress, stat tiles, a next-goal
+  banner, 16 collectable achievements and a 20-world progress map.
+
 ## Game feel (juice & sound)
+- **Emoji map pins** — every subject floats its emoji above its 3D mesh, so no
+  two tap targets look alike; pins bob gently and are extra tap area.
+- **Per-world ambient weather** — snow over Polar, leaves through Nature,
+  embers above Dinosaurs, bubbles in Ocean, code-rain in Digital and more,
+  plus soft depth fog, a tap shock-ring and an idle cinematic camera drift.
+- **Game-style UI** — chunky 3D press-down buttons, shine sweeps, XP shimmer,
+  a 2-column level-select hub on phones, screen transitions, achievement
+  banners and a full-screen Level-Up moment.
 - **Procedural soundtrack** — generative background music and all SFX (taps,
   correct/wrong, star, badge, rank-up, unlock, celebration) are synthesised live
   with the Web Audio API. Zero downloaded audio; each world has its own musical

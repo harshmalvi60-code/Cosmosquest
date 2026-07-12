@@ -19,9 +19,27 @@ export function createEngine(container, { onPick } = {}) {
   let current = null;      // { group, clickables, update }
   let clickables = [];
 
+  // Expanding shock-ring where the child tapped — makes every tap feel physical.
+  const ripples = [];
+  function spawnRipple(mesh) {
+    const wp = new THREE.Vector3();
+    mesh.getWorldPosition(wp);
+    const r = mesh.userData.markerRadius || boundingRadius(mesh) || 3;
+    const ring = new THREE.Mesh(
+      new THREE.RingGeometry(1, 1.16, 40),
+      new THREE.MeshBasicMaterial({ color: 0xFFFFFF, transparent: true, opacity: 0.9, side: THREE.DoubleSide, depthWrite: false }),
+    );
+    ring.position.copy(wp);
+    ring.scale.setScalar(r);
+    ring.userData = { life: 0, base: r };
+    scene.add(ring);
+    ripples.push(ring);
+  }
+
   createPicker(renderer.domElement, camera, () => clickables, (key, mesh) => {
     // Flag the picked subject so worlds can react (e.g. Plants grows on tap).
     clickables.forEach((c) => { c.userData.selected = c.userData.key === key; });
+    spawnRipple(mesh);
     if (current && current.onSelect) current.onSelect(key, mesh);
     if (onPick) onPick(key, mesh);
   });
@@ -100,6 +118,21 @@ export function createEngine(container, { onPick } = {}) {
       const p = m.userData.pin;
       if (p) p.position.y = p.userData.baseY * (1 + Math.sin(t * 1.8 + p.userData.phase) * 0.07);
     });
+    // Tap shock-rings: billboard, expand and fade, then clean up.
+    for (let i = ripples.length - 1; i >= 0; i--) {
+      const ring = ripples[i];
+      ring.userData.life += dt;
+      const p = ring.userData.life / 0.55;
+      ring.lookAt(camera.position);
+      ring.scale.setScalar(ring.userData.base * (1 + p * 2.4));
+      ring.material.opacity = 0.9 * (1 - p);
+      if (p >= 1) {
+        scene.remove(ring);
+        ring.geometry.dispose();
+        ring.material.dispose();
+        ripples.splice(i, 1);
+      }
+    }
     // Ambient life: weather particles, drifting glow motes, slowly turning sky.
     ambience.update(dt, t);
     if (stage.motes) { stage.motes.rotation.y += dt * 0.03; stage.motes.position.y = Math.sin(t * 0.3) * 3; stage.motes.material.opacity = 0.4 + Math.sin(t * 0.8) * 0.12; }

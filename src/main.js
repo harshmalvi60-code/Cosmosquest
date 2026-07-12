@@ -23,6 +23,13 @@ import { checkAchievements } from './game/achievements.js';
 /* ---------- boot ---------- */
 buildDOM(document.getElementById('app'));
 
+// Installable app + real offline play (the start screen promises it).
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register(import.meta.env.BASE_URL + 'sw.js').catch(() => { /* offline still optional */ });
+  });
+}
+
 const state = loadState();
 saveState(state);
 
@@ -191,6 +198,32 @@ $('tabGrownups').onclick = () => {
 };
 $('setClose').onclick = () => { sfx.tap(); closeSettings(); };
 $('jrnClose').onclick = () => { sfx.tap(); closeJourney(); setTab('Worlds'); };
+
+/* ---------- hardware / browser back button ---------- */
+// Pressing the phone's back button peels the top-most layer — quiz → briefing
+// → panel → world → hub — exactly like a native app. At the hub, back stays
+// trapped inside the app instead of leaving the page mid-game.
+history.replaceState({ eq: true }, '');
+history.pushState({ eq: true }, '');
+function backOnce() {
+  const open = (id) => $(id).classList.contains('open');
+  if (open('settings')) { sfx.tap(); closeSettings(); return true; }
+  if (open('levelup')) { $('luBtn').click(); return true; }
+  if (open('celebrate')) { $('cvBtn').click(); return true; }
+  if (open('reward')) { $('rBtn').click(); return true; }
+  if (open('quiz')) { $('qClose').click(); return true; }
+  if (open('brief')) { $('bClose').click(); return true; }
+  if (open('coach')) { coachHide(); return true; }
+  if (open('collection')) { sfx.tap(); $('collection').classList.remove('open'); setTab('Worlds'); return true; }
+  if (open('journey')) { sfx.tap(); closeJourney(); setTab('Worlds'); return true; }
+  if (open('panel')) { $('pClose').click(); return true; }
+  if (document.body.classList.contains('playing')) { $('backHub').click(); return true; }
+  return false; // hub or start screen — nothing to peel
+}
+window.addEventListener('popstate', () => {
+  backOnce();
+  history.pushState({ eq: true }, ''); // re-arm so the next back press lands here too
+});
 
 /* ---------- milestones ---------- */
 function celebrateNewAchievements(delay = 900) {

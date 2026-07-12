@@ -1,0 +1,15 @@
+{
+  "name": "ExploraQuest — Discover Every World",
+  "short_name": "ExploraQuest",
+  "description": "A 3D play-and-learn adventure for curious kids: 20 worlds, 168 subjects, quiz missions, stars and badges.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#070B1F",
+  "theme_color": "#070B1F",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon-maskable.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}
